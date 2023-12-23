@@ -1,0 +1,53 @@
+/* PATH: stylesheet.css */
+
+.button {
+    -fx-background-color: white;
+    -fx-text-fill: black;
+    -fx-padding: 20px;
+}
+
+/* Styling for the title of the page */
+
+.title {
+    -fx-alignment: center;
+}
+
+.title-text {
+    -fx-fill: grey;
+    -fx-font-size: 30px;
+    -fx-font-weight: bold;
+}
+
+/* END */
+
+/* Styling for options located on the left */
+
+/* Set all other options for the pane */
+.left-box {
+    -fx-padding: 20px;
+}
+
+/* Set all options to do with buttons in the box*/
+.left-buttons {
+    -fx-background-color: lightgrey;
+    -fx-display: inline-block;
+}
+
+/* END */
+
+/* Styling options for the text located at the bottom of the page */
+
+.bottom-box {
+    -fx-alignment: center;
+    -fx-padding: 5px;
+}
+
+/* END */
+
+/* Styling options for the options located on the right of the page */
+
+.right-pane{
+    -fx-padding: 10px;
+}
+
+/* END */

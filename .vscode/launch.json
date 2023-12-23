@@ -3,6 +3,27 @@
     "configurations": [
         {
             "type": "java",
+            "name": "App",
+            "request": "launch",
+            "mainClass": "com.rhyswalker.ricepos.App.App",
+            "projectName": "ricepos"
+        },
+        {
+            "type": "java",
+            "name": "Pos",
+            "request": "launch",
+            "mainClass": "com.rhyswalker.ricepos.Pos",
+            "projectName": "ricepos"
+        },
+        {
+            "type": "java",
+            "name": "App",
+            "request": "launch",
+            "mainClass": "com.rhyswalker.ricepos.App",
+            "projectName": "ricepos"
+        },
+        {
+            "type": "java",
             "name": "Main",
             "request": "launch",
             "mainClass": "Main",

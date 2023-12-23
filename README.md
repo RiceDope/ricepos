@@ -1,6 +1,6 @@
 # Welcome to RicePos
 
-*Currently nothing is in the project this is the base for where the project will be worked on*
+*Currently the project can be compiled which is good news. Make sure you use the commands liseted below in the given order to execute. Check dependencies tab for things that you need installed in order to run the test version of the software.*
 
 The aim of the project is to create a rough point of sale system. This is my first attempt with using OpenJfx and Maven. Any important messages will be displayed at the top of this README in *italics*.
 
@@ -9,15 +9,30 @@ The aim of the project is to create a rough point of sale system. This is my fir
 
 The following are all cmd commands to be run in the root directory of the project *ricepos*
 
+### Old way of compiling
 ```
 mvn package
 
+java --module-path "C:/Program Files/Java/javafx-sdk-21.0.1/lib" --add-modules javafx.controls,javafx.fxml,javafx.graphics,javafx.base -cp target/ricepos-1.0-SNAPSHOT.jar com.rhyswalker.ricepos.App
+```
+### New way
+The new way uses a plugin called *Maven-Shade-Plugin* in order to package the dependencies inside of the jar. Here are the steps to run.
+```
+// creating the executable
+mvn clean
+mvn compile
+mvn package
+
+// execution
 java -cp target/ricepos-1.0-SNAPSHOT.jar com.rhyswalker.ricepos.App
 ```
 
-In order to run the project you must have OpenJfx installed at version 21.0.1 and Java JDK21. You might get away with previous version but I haven't tested yet.
+## Your dependencies
+Unfortunately while this is in development if you want to test the program you will need some software on your computer to run this.
 
-Any issues encountered when compiling the project then please let me know and I will try to address them. Known issues will be displayed at the top of the page.
+In order to run the project you will need maven installed on your PC. I have linked a five minute setup guide at the bottom of the page.
+
+*You shouldnt need to have jfx installed Maven should handle all of this for you. Should compilation fail then install jfx and change some of the directory names to match your given pc.*
 
 ## Links
 These are links to sites that helped me while developing the project or software that you need to run the program.
@@ -32,9 +47,16 @@ These are links to sites that helped me while developing the project or software
 - https://maven.apache.org/what-is-maven.html
 - https://maven.apache.org/guides/introduction/introduction-to-the-standard-directory-layout.html
 - https://maven.apache.org/guides/getting-started/maven-in-five-minutes.html
+- https://mvnrepository.com/
+- https://java-decompiler.github.io/
+
 
 # Notes
 
 - This is technically my second attempt at this program. The first attempt didn't use Maven and I wanted to start again doing things in the correct way. Code from the previous attempt will be reused.
 
 - Please if you have any advice on improvement to the code and general layout then let me know.
+
+- To get the project to the state it is in now has taken many hours of things not compiling and constant crashes. Now the project is in a state where I am happy with its progress.
+
+- Big thanks to the java decompiler project (https://java-decompiler.github.io/) which once again helped me with checking the .jar files and finding out why things were not working.

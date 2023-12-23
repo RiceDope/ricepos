@@ -1,13 +1,10 @@
 package com.rhyswalker.ricepos;
 
-/**
- * Hello world!
- *
- */
-public class App 
-{
+import javafx.application.Application;
+
+public class App{
     public static void main( String[] args )
     {
-        System.out.println( "Hello World!" );
+        Application.launch(com.rhyswalker.ricepos.Pos.class, args);
     }
 }
