@@ -21,6 +21,23 @@ public class Pos{
     public Pos(App app){
         this.app = app;
 
+        if (app.getUser() == null){
+            System.err.println("No user logged in");
+            app.showLoginScreen();
+        }
+        else if (app.getUser().isManager() == false){
+            System.out.println("User is an employee so no manager options");
+            createDefaultScreen();
+        }
+        else if(app.getUser().isManager() == true){
+            System.out.println("User is a manager so add manager options as well");
+            createDefaultScreen();
+        }
+
+                
+    }
+
+    private void createDefaultScreen(){
         // set temporary text to be displayed in the center of the screen
         Text centerText = new Text("This is the center");
 
@@ -32,7 +49,7 @@ public class Pos{
         borderPane.setTop(createTitle()); // set the top to the HBox returned by createTitle()
         borderPane.setRight(createRightOptions()); // set the right side to the VBox returned by createRightOptions()
         borderPane.setCenter(centerText);
-        borderPane.setBottom(createBottomText()); // set the bottom to the HBox returned by createBottomText()        
+        borderPane.setBottom(createBottomText()); // set the bottom to the HBox returned by createBottomText()
     }
 
     /**
@@ -40,6 +57,7 @@ public class Pos{
      * @return The root object forthis scene
      */
     public javafx.scene.Parent getRoot() {
+        // return the root UI component for the screen
         return borderPane;
     }
 
@@ -50,7 +68,13 @@ public class Pos{
      */
     private Button logoutButton(){
         Button logoutButton = new Button("Logout");
-        logoutButton.setOnAction(e -> app.showLoginScreen());
+        logoutButton.setOnAction(e -> {
+            // set the current user to null
+            app.setUserNull();
+
+            // show the logout screen
+            app.showLoginScreen();
+        });
         return logoutButton;
     }
 
@@ -140,13 +164,8 @@ public class Pos{
      * @return A VBox containing the logout button
      */
     private VBox createRightOptions(){
-        // add a logout button to the right side
-        // this will eventually change the session as well as send to login screen
-        Button logoutButton = new Button("Logout");
-        logoutButton.setOnAction(e -> app.showLoginScreen());
-
         // create the VBox and add the button and css
-        VBox rightBox = new VBox(logoutButton);
+        VBox rightBox = new VBox(logoutButton());
         rightBox.getStyleClass().add("left-buttons");
 
         return rightBox;

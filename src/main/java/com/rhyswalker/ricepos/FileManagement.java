@@ -11,7 +11,7 @@ package com.rhyswalker.ricepos;
 
 import java.nio.file.*;
 import org.json.JSONObject;
-import java.io.FileReader;
+import java.util.ArrayList;
 
 public class FileManagement {
 
@@ -59,6 +59,8 @@ public class FileManagement {
      * checkFilesExist()
      * checkDirectoryExists()
      * createDirectory()
+     * defaultCustomisations()
+     * defaultUsers()
      */
 
     /**
@@ -76,9 +78,7 @@ public class FileManagement {
             System.out.println("users.json does not exist creating file");
 
             // set the default contents of the file
-            JSONObject usersJson = new JSONObject();
-            usersJson.put("user", "Rhys");
-            usersJson.put("user1", "Rhys1");
+            JSONObject usersJson = defaultUsers();
 
             // write to the file
             try {
@@ -99,9 +99,7 @@ public class FileManagement {
             System.out.println("customisations.json does not exist creating file");
 
             // set the default contents of the file
-            JSONObject customisationsJson = new JSONObject();
-            customisationsJson.put("width", "1000");
-            customisationsJson.put("height", "600");
+            JSONObject customisationsJson = defaultCustomisations();
 
             // write to the file
             try {
@@ -136,14 +134,10 @@ public class FileManagement {
     private void createDirectory(){
 
         // users default contents
-        JSONObject usersJson = new JSONObject();
-        usersJson.put("user", "Rhys");
-        usersJson.put("user1", "Rhys1");
+        JSONObject usersJson = defaultUsers();
 
         // customisations default contents
-        JSONObject customisationsJson = new JSONObject();
-        customisationsJson.put("width", "1000");
-        customisationsJson.put("height", "600");
+        JSONObject customisationsJson = defaultCustomisations();
 
         // create the base file riceposfiles
         try {
@@ -161,6 +155,46 @@ public class FileManagement {
         }
     }
 
+    /**
+     * Returns the default contents of the customisations.json file
+     * @return A JSONObject containing the default contents of the customisations.json file
+     */
+    private JSONObject defaultCustomisations(){
+        // set the default contents of the file
+        JSONObject customisationsJson = new JSONObject();
+        customisationsJson.put("width", "1000");
+        customisationsJson.put("height", "600");
+
+        return customisationsJson;
+    }
+
+    /**
+     * Returns the default contents of the users.json file
+     * @return A JSONObject containing the default contents of the users.json file
+     */
+    private JSONObject defaultUsers(){
+
+        // json object to contain all of the data for the default user
+        JSONObject defaultManager = new JSONObject();
+        defaultManager.put("username", "defaultmanager");
+        defaultManager.put("password", "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8"); // default password is password
+        defaultManager.put("fullName", "Default Manager");
+        defaultManager.put("manager", true);
+
+        JSONObject defaultEmployee = new JSONObject();
+        defaultEmployee.put("username", "defaultemployee");
+        defaultEmployee.put("password", "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8"); // default password is password
+        defaultEmployee.put("fullName", "Default Employee");
+        defaultEmployee.put("manager", false);
+
+        // add to the default key-value pair
+        JSONObject usersJson = new JSONObject();
+        usersJson.put("defaultmanager", defaultManager);
+        usersJson.put("defaultemployee", defaultEmployee);
+
+        return usersJson;
+    }
+
     /*
      * ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
      * END OF THE SETUP FILES
@@ -172,7 +206,8 @@ public class FileManagement {
       * START OF THE FILE READING SCRIPTS
       * ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
       *
-      * below here you will find all functions needed for the running of the program so getting and reading data as well as writing data to them
+      * getHeight()
+      * getWidth()
       */
 
       /**
@@ -211,11 +246,76 @@ public class FileManagement {
         }
     }
 
+    /**
+     * This function will return a list of all of the users in the users.json file
+     * @return An arrayList containing JSONObjects of all of the registered users.
+     */
+    public ArrayList<JSONObject> getListOfUsers(){
 
+        ArrayList<JSONObject> users = new ArrayList<JSONObject>();
+
+        try{
+            // read the file as a string and then return the height to the application
+            String fileContent = Files.readString(usersFilePath);
+            JSONObject usersFile = new JSONObject(fileContent);
+
+            for (String key: usersFile.keySet()){
+                JSONObject user = usersFile.getJSONObject(key);
+                users.add(user);
+            }
+
+            return users;
+        }
+        catch(Exception e){
+            // if there is an error then return the default height
+            System.err.println("Error reading users.json: " + e.getMessage());
+        }
+
+        return null;
+    }
 
       /*
        * ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
        * END OF THE FILE READING SCRIPTS
        * ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
        */
+
+       /*
+        * ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        * START OF THE FILE WRITING SCRIPTS
+        * ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        */
+
+    /**
+     * Will add a new user to the file users.json
+     * @param username The username of the user
+     * @param password The hashed password of the user
+     * @param fullName The full name of the user
+     * @param manager Boolean saying whether the user is a manager or not
+     */
+    public void addUser(String username, String password, String fullName, boolean manager){
+        try{
+            // read the file as a string and then return the height to the application
+            String fileContent = Files.readString(usersFilePath);
+            JSONObject usersJson = new JSONObject(fileContent);
+
+            // now create a new json object containing the new user
+            JSONObject newUser = new JSONObject();
+            newUser.put("username", username);
+            newUser.put("password", password);
+            newUser.put("fullName", fullName);
+            newUser.put("manager", manager);
+
+            // add to the existing json object
+            usersJson.put(username, newUser);
+
+            // write to the file directly
+            Files.write(usersFilePath, usersJson.toString(4).getBytes());
+            
+        }
+        catch(Exception e){
+            // if there is an error then return the default height
+            System.err.println("Error writing to users.json: " + e.getMessage());
+        }
+    }
 }

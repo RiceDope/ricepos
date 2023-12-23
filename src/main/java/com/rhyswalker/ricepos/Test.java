@@ -14,7 +14,7 @@ public class Test {
 
         FileManagement fileManagement = new FileManagement();
 
-        System.out.println(fileManagement.getHeight());
+        fileManagement.getListOfUsers();
 
     }
 

@@ -1,8 +1,12 @@
 # Welcome to RicePos
 
-*If you have run the project for the first time there will be a file called riceposfiles in your home directory. If you delete the application you should remove this*
+*No current messages*
 
 The aim of the project is to create a rough point of sale system. This is my first attempt with using OpenJfx and Maven. Any important messages will be displayed at the top of this README in *italics*.
+
+## Notices
+- The project creates a file in your *user.home* directory called *riceposfiles* you may delete this file as and when you wish. It creates this any time you run the project.
+- The default password for defaultemployee and default manager is *password*.
 
 ## Running the project
 *This may be simple to some but for me this took a while to get my head around so here goes*
@@ -24,11 +28,6 @@ mvn compile
 mvn package
 
 // execution
-java -cp target/ricepos-1.0-SNAPSHOT.jar com.rhyswalker.ricepos.App
-```
-
-*Should that way of executing fail then use this command*
-```
 mvn exec:java
 ```
 
@@ -44,6 +43,8 @@ In order to run the project you will need maven installed on your PC. I have lin
 So now that the groundwork has been laid I can begin work on the actuall software and development. Below I will list all of the different screens that need to be developed as well as features for some of those screens and scripts.
 
 For future reference the goal for users is that when the project is downloaded and started there will be a setup user. This is a standardised username and password to allow the manager to setup the software. From there multiple users can be created and then an actual manager can be added and setup user removed for security.
+
+For reference and an explanation of how the files link together a file called projectbreakdown.md will be created and made available on the github soon.
 
 *Some of these files have not been created yet. If you can't see them treat this as a future plans list.*
 
@@ -68,6 +69,9 @@ This is going to be a custom datatype that will store data about the user we cur
 ### FileManagement.java
 This is a class that will deal with primarily file access and json reading and writing. For now it will focus on opening and closing the users file which will contain basic information "username", "fullName", "manager", "password" - password will be a hashedString
 
+### Hash.java
+This contains the functions required in order to implement a SHA-256 hash. The code in here was developed by *(https://www.geeksforgeeks.org/sha-256-hash-in-java/)* all credit to them. Would not have been able to do this without that.
+
 ### users.json
 This is the file containing all of the users data and information. Currently stores in the home directory.
 
@@ -75,12 +79,11 @@ This is the file containing all of the users data and information. Currently sto
 This is the file containing all custom settings that will be applied globaly throughout the application. Window size is the first one that I will be adding.
 
 ## Recent Updates
-- Changed the structure of App.java for to allow a more easy switch between scenes.
-- Updated Pos.java to include a logout button (This will eventually be moved and allow for a sort of *Session* variable)
-- Removed unecessary imports from certain classes.
-- Added the groundwork for the User.java class.
-- Added the groundwork for the FileManagement.java class. - creates users.java and customisations.java if they don't exist with default values
-- App.java now reads custom window dimensions from files located in the user.home directory
+- Added function to write to the users.json file
+- Added login functionality
+- Added Hash.java which allows for the use of a SHA-256 hash (https://www.geeksforgeeks.org/sha-256-hash-in-java/)
+- Added a sort of session variable by storing a variable called currentUser. It is of class User.java
+- Added functionality for users to either be logged in as manager or employee.
 
 ## Links
 These are links to sites that helped me while developing the project or software that you need to run the program.
@@ -97,6 +100,8 @@ These are links to sites that helped me while developing the project or software
 - https://maven.apache.org/guides/getting-started/maven-in-five-minutes.html
 - https://mvnrepository.com/
 - https://java-decompiler.github.io/
+- https://www.geeksforgeeks.org/sha-256-hash-in-java/
+- https://java-decompiler.github.io/
 
 
 # Notes
@@ -107,4 +112,6 @@ These are links to sites that helped me while developing the project or software
 
 - To get the project to the state it is in now has taken many hours of things not compiling and constant crashes. Now the project is in a state where I am happy with its progress.
 
-- Big thanks to the java decompiler project (https://java-decompiler.github.io/) which once again helped me with checking the .jar files and finding out why things were not working.
+- Big thanks to the java decompiler project which once again helped me with checking the .jar files and finding out why things were not working.
+
+- Thanks to geeksforgeeks.com for help with the code for Hash.java. I would not have been able to create that without the source code from their website check the links section for the page.
