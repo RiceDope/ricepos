@@ -5,7 +5,7 @@ package com.rhyswalker.ricepos;
  * It is responsible for the successfull boot of the application with all customised settings and such.
  * 
  * @author Rhys Walker
- * @version 0.1
+ * @version 0.2
  * @since 2023-12-23
  */
 
@@ -20,6 +20,8 @@ public class App extends Application{
     private Login loginScreen;
     private int height;
     private int width;
+    private Scene loginScene;
+    private Scene posScene;
 
     public static void main( String[] args )
     {
@@ -30,31 +32,44 @@ public class App extends Application{
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
 
+        // create the file management object
+        FileManagement fileManagement = new FileManagement();
+
         // set the height and width properties will eventually be access from the pos_settings.json file
-        height = 600;
-        width = 1000;
+        height = fileManagement.getHeight();
+        width = fileManagement.getWidth();
 
         // Create instances of the screens
         posScreen = new Pos(this);
         loginScreen = new Login(this);
 
+        // create the scenes
+        createLoginScene();
+        createPosScene();
+
         // Show the login screen initially
         showLoginScreen();
     }
 
+    private void createLoginScene() {
+        loginScene = new Scene(loginScreen.getRoot(), width, height);
+        // loginScene.getStylesheets().add(getClass().getResource("/styles/pos.css").toExternalForm());
+    }
+
+    private void createPosScene() {
+        posScene = new Scene(posScreen.getRoot(), width, height);
+        posScene.getStylesheets().add(getClass().getResource("/styles/pos.css").toExternalForm());
+    }
+
     
     public void showPosScreen() {
-        Scene scene = new Scene(posScreen.getRoot(), width, height);
-        scene.getStylesheets().add(getClass().getResource("/styles/pos.css").toExternalForm());
-        primaryStage.setScene(scene);
+        primaryStage.setScene(posScene);
         primaryStage.setTitle("POS Screen");
         primaryStage.show();
     }
 
     public void showLoginScreen() {
-        Scene scene = new Scene(loginScreen.getRoot(), width, height);
-        // scene.getStylesheets().add(getClass().getResource("/styles/pos.css").toExternalForm()); CREATE NEW CSS AND APPLY
-        primaryStage.setScene(scene);
+        primaryStage.setScene(loginScene);
         primaryStage.setTitle("Login Screen");
         primaryStage.show();
     }

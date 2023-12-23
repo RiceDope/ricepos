@@ -1,8 +1,16 @@
 package com.rhyswalker.ricepos;
 
+/**
+ * The login page for the whole system.
+ * This is in a very much testing state at the moment. Will be updated as the project progresses.
+ * 
+ * @author Rhys Walker
+ * @version 0.1
+ * @since 2023-12-23
+ */
+
 import javafx.scene.control.Button;
 import javafx.scene.layout.*;
-import javafx.scene.Scene;
 
 public class Login{
 

@@ -4,13 +4,12 @@ package com.rhyswalker.ricepos;
  * Pos.java is the class responsible for the actuall till screen of the application.
  * 
  * @author Rhys Walker
- * @version 0.2
+ * @version 0.3
  * @since 2023-12-23
  */
 
 import javafx.scene.control.Button;
 import javafx.scene.text.Text;
-import javafx.scene.Scene;
 import javafx.scene.layout.*;
 
 
@@ -31,7 +30,7 @@ public class Pos{
         // set all of the positions in the borderPane
         borderPane.setLeft(createLeftSideOptions()); // set the left side to the VBox returned by createLeftSideOptions()
         borderPane.setTop(createTitle()); // set the top to the HBox returned by createTitle()
-        // borderPane.setRight(createRightOptions()); // set the right side to the VBox returned by createRightOptions()
+        borderPane.setRight(createRightOptions()); // set the right side to the VBox returned by createRightOptions()
         borderPane.setCenter(centerText);
         borderPane.setBottom(createBottomText()); // set the bottom to the HBox returned by createBottomText()        
     }
@@ -136,20 +135,20 @@ public class Pos{
         return bottomBox;
     }
 
-    // /**
-    //  * For now this will hold the logout button
-    //  * @return A VBox containing the logout button
-    //  */
-    // private VBox createRightOptions(){
-    //     // add a logout button to the right side
-    //     // this will eventually change the session as well as send to login screen
-    //     Button logoutButton = new Button("Logout");
-    //     logoutButton.setOnAction(e -> app.showLoginScreen());
+    /**
+     * For now this will hold the logout button
+     * @return A VBox containing the logout button
+     */
+    private VBox createRightOptions(){
+        // add a logout button to the right side
+        // this will eventually change the session as well as send to login screen
+        Button logoutButton = new Button("Logout");
+        logoutButton.setOnAction(e -> app.showLoginScreen());
 
-    //     // create the VBox and add the button and css
-    //     VBox rightBox = new VBox(logoutButton);
-    //     rightBox.getStyleClass().add("left-buttons");
+        // create the VBox and add the button and css
+        VBox rightBox = new VBox(logoutButton);
+        rightBox.getStyleClass().add("left-buttons");
 
-    //     return rightBox;
-    // }
+        return rightBox;
+    }
 }

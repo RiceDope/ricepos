@@ -1,6 +1,6 @@
 # Welcome to RicePos
 
-*Currently the project can be compiled which is good news. Make sure you use the commands liseted below in the given order to execute. Check dependencies tab for things that you need installed in order to run the test version of the software.*
+*If you have run the project for the first time there will be a file called riceposfiles in your home directory. If you delete the application you should remove this*
 
 The aim of the project is to create a rough point of sale system. This is my first attempt with using OpenJfx and Maven. Any important messages will be displayed at the top of this README in *italics*.
 
@@ -43,6 +43,8 @@ In order to run the project you will need maven installed on your PC. I have lin
 
 So now that the groundwork has been laid I can begin work on the actuall software and development. Below I will list all of the different screens that need to be developed as well as features for some of those screens and scripts.
 
+For future reference the goal for users is that when the project is downloaded and started there will be a setup user. This is a standardised username and password to allow the manager to setup the software. From there multiple users can be created and then an actual manager can be added and setup user removed for security.
+
 *Some of these files have not been created yet. If you can't see them treat this as a future plans list.*
 
 ### App.java
@@ -59,6 +61,26 @@ This is a screen specifically for users that are registered as a manager. If you
 
 ### Management.java
 This is again only accessible to management users. Here you can manage different employees, reset passwords and check reports on sales that have gone through the till.
+
+### User.java
+This is going to be a custom datatype that will store data about the user we currently have logged into the system.
+
+### FileManagement.java
+This is a class that will deal with primarily file access and json reading and writing. For now it will focus on opening and closing the users file which will contain basic information "username", "fullName", "manager", "password" - password will be a hashedString
+
+### users.json
+This is the file containing all of the users data and information. Currently stores in the home directory.
+
+### customisation.json
+This is the file containing all custom settings that will be applied globaly throughout the application. Window size is the first one that I will be adding.
+
+## Recent Updates
+- Changed the structure of App.java for to allow a more easy switch between scenes.
+- Updated Pos.java to include a logout button (This will eventually be moved and allow for a sort of *Session* variable)
+- Removed unecessary imports from certain classes.
+- Added the groundwork for the User.java class.
+- Added the groundwork for the FileManagement.java class. - creates users.java and customisations.java if they don't exist with default values
+- App.java now reads custom window dimensions from files located in the user.home directory
 
 ## Links
 These are links to sites that helped me while developing the project or software that you need to run the program.
