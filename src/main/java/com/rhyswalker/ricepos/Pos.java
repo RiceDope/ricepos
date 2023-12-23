@@ -1,11 +1,11 @@
 package com.rhyswalker.ricepos;
 
 /**
- * GUI.java is the base class for all of the GUI elements in Rice POS.
+ * Pos.java is the class responsible for the actuall till screen of the application.
  * 
  * @author Rhys Walker
  * @version 0.2
- * @since 2023-12-22
+ * @since 2023-12-23
  */
 
 import javafx.application.Application;
@@ -16,20 +16,19 @@ import javafx.stage.Stage;
 import javafx.scene.layout.*;
 
 
-public class Pos extends Application {
+public class Pos{
 
-    //private Button button;
+    private App app;
+    private BorderPane borderPane;
+    private int height;
+    private int width;
 
-    public static void main(String[] args) {
-        launch(args);
-    }
-
-    @Override
-    public void start(Stage primaryStage) {
+    public Pos(App app){
+        this.app = app;
 
         // set width and height for the window
-        int width = 1000;
-        int height = 600;
+        width = 1000;
+        height = 600;
 
         // set texts for each position in a borderPane
         Text topText = new Text("This is the top");
@@ -39,23 +38,22 @@ public class Pos extends Application {
         Text bottomText = new Text("This is the bottom");
 
         // create the border pane object
-        BorderPane borderPane = new BorderPane();
+        borderPane = new BorderPane();
 
         // set all of the positions in the borderPane
         borderPane.setLeft(createLeftSideOptions()); // set the left side to the VBox returned by createLeftSideOptions()
         borderPane.setTop(createTitle()); // set the top to the HBox returned by createTitle()
         borderPane.setRight(createRightOptions()); // set the right side to the VBox returned by createRightOptions()
         borderPane.setCenter(centerText);
-        borderPane.setBottom(createBottomText()); // set the bottom to the HBox returned by createBottomText()
+        borderPane.setBottom(createBottomText()); // set the bottom to the HBox returned by createBottomText()        
+    }
 
-        // make a new scene with the border pane
-        Scene scene = new Scene(borderPane, width, height);
-        scene.getStylesheets().add("stylesheet.css");
-
-        // set the current scene, add a title and show it
-        primaryStage.setScene(scene);
-        primaryStage.setTitle("Rice POS");
-        primaryStage.show();
+    /**
+     * Returns what the root object for this scene should be
+     * @return The root object forthis scene
+     */
+    public javafx.scene.Parent getRoot() {
+        return borderPane;
     }
 
     /**

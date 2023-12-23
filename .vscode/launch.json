@@ -5,6 +5,13 @@
             "type": "java",
             "name": "App",
             "request": "launch",
+            "mainClass": "com.rhyswalker.ricepos/com.rhyswalker.ricepos.App",
+            "projectName": "ricepos"
+        },
+        {
+            "type": "java",
+            "name": "App",
+            "request": "launch",
             "mainClass": "com.rhyswalker.ricepos.App.App",
             "projectName": "ricepos"
         },

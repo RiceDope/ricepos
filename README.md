@@ -34,6 +34,27 @@ In order to run the project you will need maven installed on your PC. I have lin
 
 *You shouldnt need to have jfx installed Maven should handle all of this for you. Should compilation fail then install jfx and change some of the directory names to match your given pc.*
 
+## Project Breakdown
+
+So now that the groundwork has been laid I can begin work on the actuall software and development. Below I will list all of the different screens that need to be developed as well as features for some of those screens and scripts.
+
+*Some of these files have not been created yet. If you can't see them treat this as a future plans list.*
+
+### App.java
+This is the "main" script of the whole project. It will first of all open a json file and from there load all custom settings and launch the Login.java file.
+
+### Pos.java
+This is the till screen this is responsible for processing payments adding items to the basket and so on.
+
+### Login.java
+This is the login screen for the project. This is the point at which the program decides wether you are a Manager or an Employee.
+
+### StockManagement.java
+This is a screen specifically for users that are registered as a manager. If you are you can edit the products on sale adjust stock counts change prices etc..
+
+### Management.java
+This is again only accessible to management users. Here you can manage different employees, reset passwords and check reports on sales that have gone through the till.
+
 ## Links
 These are links to sites that helped me while developing the project or software that you need to run the program.
 
