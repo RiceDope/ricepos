@@ -25,27 +25,39 @@ public class Pos{
             System.err.println("No user logged in");
             app.showLoginScreen();
         }
-        else if (app.getUser().isManager() == false){
-            System.out.println("User is an employee so no manager options");
-            createDefaultScreen();
-        }
-        else if(app.getUser().isManager() == true){
-            System.out.println("User is a manager so add manager options as well");
-            createDefaultScreen();
+        else{ // no need for a manager check here just load the correct options at making each side
+            System.out.println("User is a Manager: " + app.getUser().isManager());
+            createDefaultScreen(app.getUser().isManager()); // pass in isManager to create the correct screen
         }
 
                 
     }
 
-    private void createDefaultScreen(){
+    /**
+     * Creates the default options for a non manager user
+     */
+    private void createDefaultScreen(Boolean isManager){
         // set temporary text to be displayed in the center of the screen
         Text centerText = new Text("This is the center");
 
         // create the border pane object
         borderPane = new BorderPane();
 
+        // only certain ones need to be changed if the user is a manager (leftSideOptionsSpecifically)
+        if (isManager == true){ // is a manager
+            // style of left side is 2 vbox's within a vbox
+            VBox wholeLeftSide = new VBox(createLeftSideOptions(), createManagerLeftSideOptions(), logoutButton());
+            borderPane.setLeft(wholeLeftSide);
+        }
+        else{ // is an employee
+            // style of left side is a vbox in a vbox
+            VBox wholeLeftSide = new VBox(createLeftSideOptions(), logoutButton());
+            borderPane.setLeft(wholeLeftSide);
+        }
+
+
         // set all of the positions in the borderPane
-        borderPane.setLeft(createLeftSideOptions()); // set the left side to the VBox returned by createLeftSideOptions()
+        
         borderPane.setTop(createTitle()); // set the top to the HBox returned by createTitle()
         borderPane.setRight(createRightOptions()); // set the right side to the VBox returned by createRightOptions()
         borderPane.setCenter(centerText);
@@ -75,6 +87,10 @@ public class Pos{
             // show the logout screen
             app.showLoginScreen();
         });
+
+        logoutButton.setMaxWidth(Double.MAX_VALUE);
+        logoutButton.getStyleClass().add("left-buttons");
+
         return logoutButton;
     }
 
@@ -85,6 +101,41 @@ public class Pos{
     private void updateGUI(Button button) {
         // Change the text of the button
         System.out.println("Button pressed");
+    }
+
+    private VBox createManagerLeftSideOptions(){
+
+        // create the stock button
+        Button stock = new Button("Stock Management");
+
+        // create an event handler for the button
+        stock.setOnAction(e -> {
+            // update the button
+            updateGUI(stock);
+        });
+
+        // create the user management button
+        Button userManagement = new Button("User Management");
+
+        // create an event handler for the button
+        userManagement.setOnAction(e -> {
+            // update the button
+            updateGUI(userManagement);
+        });
+
+        // format the buttons to fill the whole VBox and get colour settings
+        stock.getStyleClass().add("left-buttons");
+        stock.setMaxWidth(Double.MAX_VALUE);
+        userManagement.getStyleClass().add("left-buttons");
+        userManagement.setMaxWidth(Double.MAX_VALUE);
+
+        // use a vbox to set organise the buttons
+        VBox managerOptions = new VBox(stock, userManagement);
+
+        // apply styling to the box
+        managerOptions.getStyleClass().addAll("leftBox");
+
+        return managerOptions;
     }
 
     /**
@@ -160,13 +211,12 @@ public class Pos{
     }
 
     /**
-     * For now this will hold the logout button
+     * For now text will sit here
      * @return A VBox containing the logout button
      */
     private VBox createRightOptions(){
-        // create the VBox and add the button and css
-        VBox rightBox = new VBox(logoutButton());
-        rightBox.getStyleClass().add("left-buttons");
+        // create the VBox and add the text
+        VBox rightBox = new VBox(new Text("Right Side Options"));
 
         return rightBox;
     }

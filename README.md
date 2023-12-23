@@ -44,7 +44,7 @@ So now that the groundwork has been laid I can begin work on the actuall softwar
 
 For future reference the goal for users is that when the project is downloaded and started there will be a setup user. This is a standardised username and password to allow the manager to setup the software. From there multiple users can be created and then an actual manager can be added and setup user removed for security.
 
-For reference and an explanation of how the files link together a file called projectbreakdown.md will be created and made available on the github soon.
+For reference and an explanation of how the project works and runs then check projectbreakdown.md.
 
 *Some of these files have not been created yet. If you can't see them treat this as a future plans list.*
 
@@ -60,8 +60,11 @@ This is the login screen for the project. This is the point at which the program
 ### StockManagement.java
 This is a screen specifically for users that are registered as a manager. If you are you can edit the products on sale adjust stock counts change prices etc..
 
-### Management.java
+### UserManagement.java
 This is again only accessible to management users. Here you can manage different employees, reset passwords and check reports on sales that have gone through the till.
+
+### Reports.java
+This will contain all the information on sales as well as custom reports that can be generated.
 
 ### User.java
 This is going to be a custom datatype that will store data about the user we currently have logged into the system.
@@ -78,12 +81,19 @@ This is the file containing all of the users data and information. Currently sto
 ### customisation.json
 This is the file containing all custom settings that will be applied globaly throughout the application. Window size is the first one that I will be adding.
 
+### stock.json
+This is the file that contains all of the details on stock that can be processed. (Count, Id, Cost, Name)
+
+### purchases.json
+This is the file that will count all of the purchases that have been made. (ReceiptID, itemsInTransaction{id, amountSold}, transactionValue, tenderType, beenRefunded)
+
+### refunds.json
+This is the file that will count all of the refunds that have been processed through the till (purchases.ReceiptId, reason(Of specified list))
+
 ## Recent Updates
-- Added function to write to the users.json file
-- Added login functionality
-- Added Hash.java which allows for the use of a SHA-256 hash (https://www.geeksforgeeks.org/sha-256-hash-in-java/)
-- Added a sort of session variable by storing a variable called currentUser. It is of class User.java
-- Added functionality for users to either be logged in as manager or employee.
+- Created projectbreakdown.md
+- Added manager options as placeholders
+- Moved logout button to left side
 
 ## Links
 These are links to sites that helped me while developing the project or software that you need to run the program.
