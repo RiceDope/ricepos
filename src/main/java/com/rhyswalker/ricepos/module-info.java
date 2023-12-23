@@ -1,8 +1,8 @@
 module com.rhyswalker.ricepos {
     requires javafx.controls;
     requires javafx.fxml;
-    requires javafx.graphics;
     requires javafx.base;
+    requires javafx.graphics;
 
     opens com.rhyswalker.ricepos to javafx.fxml;
 

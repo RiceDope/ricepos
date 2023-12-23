@@ -8,11 +8,9 @@ package com.rhyswalker.ricepos;
  * @since 2023-12-23
  */
 
-import javafx.application.Application;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
+import javafx.scene.Scene;
 import javafx.scene.layout.*;
 
 
@@ -20,22 +18,12 @@ public class Pos{
 
     private App app;
     private BorderPane borderPane;
-    private int height;
-    private int width;
 
     public Pos(App app){
         this.app = app;
 
-        // set width and height for the window
-        width = 1000;
-        height = 600;
-
-        // set texts for each position in a borderPane
-        Text topText = new Text("This is the top");
-        Text leftText = new Text("This is the left");
-        Text rightText = new Text("This is the right");
+        // set temporary text to be displayed in the center of the screen
         Text centerText = new Text("This is the center");
-        Text bottomText = new Text("This is the bottom");
 
         // create the border pane object
         borderPane = new BorderPane();
@@ -43,7 +31,7 @@ public class Pos{
         // set all of the positions in the borderPane
         borderPane.setLeft(createLeftSideOptions()); // set the left side to the VBox returned by createLeftSideOptions()
         borderPane.setTop(createTitle()); // set the top to the HBox returned by createTitle()
-        borderPane.setRight(createRightOptions()); // set the right side to the VBox returned by createRightOptions()
+        // borderPane.setRight(createRightOptions()); // set the right side to the VBox returned by createRightOptions()
         borderPane.setCenter(centerText);
         borderPane.setBottom(createBottomText()); // set the bottom to the HBox returned by createBottomText()        
     }
@@ -54,6 +42,17 @@ public class Pos{
      */
     public javafx.scene.Parent getRoot() {
         return borderPane;
+    }
+
+    /**
+     * A function that creates a button to send us to the login screen
+     * Will add functionality to logout the current user we are tracking
+     * @return The button that sends back to the login screen
+     */
+    private Button logoutButton(){
+        Button logoutButton = new Button("Logout");
+        logoutButton.setOnAction(e -> app.showLoginScreen());
+        return logoutButton;
     }
 
     /**
@@ -137,15 +136,20 @@ public class Pos{
         return bottomBox;
     }
 
-    /**
-     * For now will just return text inside a VBox and will be updated later to feature more information
-     * @return A VBox containing the options
-     */
-    private VBox createRightOptions(){
-        Text rightText = new Text("Will be updated \nlater to feature \nmore informaiton \nand options related \nto taking payments");
-        VBox rightBox = new VBox(rightText);
-        rightBox.getStyleClass().add("right-pane");
+    // /**
+    //  * For now this will hold the logout button
+    //  * @return A VBox containing the logout button
+    //  */
+    // private VBox createRightOptions(){
+    //     // add a logout button to the right side
+    //     // this will eventually change the session as well as send to login screen
+    //     Button logoutButton = new Button("Logout");
+    //     logoutButton.setOnAction(e -> app.showLoginScreen());
 
-        return rightBox;
-    }
+    //     // create the VBox and add the button and css
+    //     VBox rightBox = new VBox(logoutButton);
+    //     rightBox.getStyleClass().add("left-buttons");
+
+    //     return rightBox;
+    // }
 }

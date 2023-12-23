@@ -27,6 +27,11 @@ mvn package
 java -cp target/ricepos-1.0-SNAPSHOT.jar com.rhyswalker.ricepos.App
 ```
 
+*Should that way of executing fail then use this command*
+```
+mvn exec:java
+```
+
 ## Your dependencies
 Unfortunately while this is in development if you want to test the program you will need some software on your computer to run this.
 

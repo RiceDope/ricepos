@@ -1,23 +1,17 @@
 package com.rhyswalker.ricepos;
 
 import javafx.scene.control.Button;
-import javafx.scene.text.Text;
 import javafx.scene.layout.*;
+import javafx.scene.Scene;
 
 public class Login{
 
     // create default variables that will be needed later
     private App app;
     private BorderPane borderPane;
-    private int height;
-    private int width;
 
     public Login(App app){
         this.app = app;
-
-        // set width and height for the window
-        width = 1000;
-        height = 600;
 
         // create the border pane object and add our items to it
         borderPane = new BorderPane();
