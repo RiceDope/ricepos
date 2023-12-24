@@ -2,7 +2,8 @@
 
 This is a list of known errors that can occur and ways that they can be resolved.
 
-*Any known edge cases will be listed and known errors in the error reporting system*
+## *IMPORTANT*
+For errors A1 and A2. It may be easier to delete the files and remake them as there is no tracking for removed IDs and finding the IDs that have been removed and not repopulated may be harder.
 
 ## A1
 This is an error in the FileMangagement script. The default stock is attempting to be written to however it appears that StockID is not 0. This means that the stock file has gone missing and is being regenerated. This means no stock will be available in the system. If you have deleted or removed the stock.json file put it back in the correct directory and then change sysfiles.json to the correct stockID *One higher than the last stock added*

@@ -5,8 +5,8 @@ package com.rhyswalker.ricepos;
  * It is responsible for the successfull boot of the application with all customised settings and such.
  * 
  * @author Rhys Walker
- * @version 0.2
- * @since 2023-12-23
+ * @version 0.3
+ * @since 2023-12-24
  */
 
 import javafx.application.Application;

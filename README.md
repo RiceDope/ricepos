@@ -59,6 +59,7 @@ This is the login screen for the project. This is the point at which the program
 
 ### StockManagement.java
 This is a screen specifically for users that are registered as a manager. If you are you can edit the products on sale adjust stock counts change prices etc..
+This page will use tabs to change between the different options available to the user for adding removing and inspecting stock.
 
 ### UserManagement.java
 This is again only accessible to management users. Here you can manage different employees, reset passwords and check reports on sales that have gone through the till.
@@ -94,15 +95,10 @@ This is the file that will count all of the purchases that have been made. (Rece
 This is the file that will count all of the refunds that have been processed through the till (purchases.ReceiptId, reason(Of specified list))
 
 ## Recent Updates
-- Added groundwork for StockManagement.java, UserManagement.java and Reports.java
-- FileManagement.java has been updated to include stock.json and sysfiles.json
-- Can now add a stock item to stock.json
-- Can increment values inside of sysfiles.json
-- Can search for a stock item by its ID
-- Added errors.md
+- Added functions for stock management to FileManagement.java. Can update by name or ID
+- Any items that are removed the ID is tracked by sysfiles.json.
 
 ## Known issues
-- Need to add check to make sure that dupilcate names cannot be inputed. Despite having unique IDs they need to have Unique names to make searching by name possible.
 - Description needs to be added to stock.json to allow differentiation between names of similar type.
 
 ## Links

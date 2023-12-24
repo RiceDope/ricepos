@@ -5,12 +5,13 @@ package com.rhyswalker.ricepos;
  * By default the application will create a directory in the users home directory.
  * 
  * @author Rhys Walker
- * @version 0.2
- * @since 2023-12-23
+ * @version 0.5
+ * @since 2023-12-24
  */
 
 import java.nio.file.*;
 import org.json.JSONObject;
+import org.json.JSONArray;
 import java.util.ArrayList;
 
 public class FileManagement {
@@ -284,7 +285,7 @@ public class FileManagement {
             JSONObject defaultItem = new JSONObject();
             defaultItem.put("id", 0); // get the starting stock figure which is 0
             defaultItem.put("count", 0);
-            defaultItem.put("cost", 0);
+            defaultItem.put("cost", 0.0);
             defaultItem.put("name", "defaultStock");
 
             // THE ABOVE ARE DEFAULT VALUES DO NOT REMOVE THIS ITEM
@@ -304,7 +305,7 @@ public class FileManagement {
             JSONObject defaultItem = new JSONObject();
             defaultItem.put("id", 0); // get the starting stock figure which is 0
             defaultItem.put("count", 0);
-            defaultItem.put("cost", 0);
+            defaultItem.put("cost", 0.0);
             defaultItem.put("name", "defaultStock");
 
             // THE ABOVE ARE DEFAULT VALUES DO NOT REMOVE THIS ITEM
@@ -332,6 +333,8 @@ public class FileManagement {
         JSONObject sysfilesjson = new JSONObject();
         sysfilesjson.put("receiptID", 0);
         sysfilesjson.put("stockID", 0);
+        JSONArray unusedIDs = new JSONArray();
+        sysfilesjson.put("unusedIDs", unusedIDs);
 
         return sysfilesjson;
     }
@@ -452,19 +455,64 @@ public class FileManagement {
         }
     }
 
+    /**
+     * Gets all of the stock items in the stock.json file
+     * @return A JSONObject containing all of the stock items
+     */
+    public JSONObject getAllStock(){
+        try{
+            // read the file as a string and then return the height to the application
+            String fileContent = Files.readString(stockFilePath);
+            JSONObject stockJson = new JSONObject(fileContent);
+            return stockJson;
+        }
+        catch(Exception e){
+            // if there is an error then return the default height
+            System.err.println("Error reading stock.json: " + e.getMessage());
+            return null;
+        }
+    }
 
+    /**
+     * Get a specific stock item by its name
+     * @param name The name of the stock item
+     * @return A JSONObject containing the stock item
+     */
+    public JSONObject getStockByName(String name){
+        try{
+            // read the file as a string and then return the height to the application
+            String fileContent = Files.readString(stockFilePath);
+            JSONObject stockJson = new JSONObject(fileContent);
 
-      /*
-       * ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-       * END OF THE FILE READING SCRIPTS
-       * ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-       */
+            // iterate over the stock items
+            for (String key: stockJson.keySet()){
+                JSONObject stockItem = stockJson.getJSONObject(key);
+                if (stockItem.getString("name").equals(name)){
+                    return stockItem;
+                }
+            }
 
-       /*
-        * ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-        * START OF THE FILE WRITING SCRIPTS
-        * ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-        */
+            // if we get here then the item does not exist
+            return null;
+        }
+        catch(Exception e){
+            // if there is an error then return the default height
+            System.err.println("Error reading stock.json: " + e.getMessage());
+            return null;
+        }
+    }
+
+    /*
+     * ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     * END OF THE FILE READING SCRIPTS
+     * ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     */
+
+    /*
+     * ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     * START OF THE FILE WRITING SCRIPTS
+     * ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     */
 
     /**
      * Will add a new user to the file users.json
@@ -558,7 +606,7 @@ public class FileManagement {
      * @param count Allow the user to initialise with a count
      * @param name Set the name of the given item
      */
-    public void addStock(int cost, int count, String name){
+    public void addStock(double cost, int count, String name){
 
         // get the current stockID
         int stockID = getCurrentStockID();
@@ -570,26 +618,348 @@ public class FileManagement {
         newStock.put("name", name); // name 
         newStock.put("id", stockID);
 
-        // Need to add a check here to find out if stock item being added is duplicate
-        
-        try {
+        // we know that that name is not already used
+        if (getStockByName(name) == null){
+            try {
+                // read the file as a string
+                String fileContent = Files.readString(stockFilePath);
+                JSONObject stock = new JSONObject(fileContent);
+
+                // add the new stock to the file
+                stock.put(String.valueOf(stockID), newStock);
+
+                // write to the file directly
+                Files.write(stockFilePath, stock.toString(4).getBytes());
+
+                // stock successfully added increment the stockID
+                incrementStockID();
+            }
+            catch(Exception e){
+                // if there is an error then return the default height
+                System.err.println("Error adding to the stock.json file: " + e.getMessage());
+            }
+        }
+        // the name is not unique so we should  not add the item and print an error
+        else {
+            System.err.println("Error adding new stock as the name was not unique");
+        }    
+    }
+
+    /**
+     * Update the price of an item by using an ID
+     * @param id The id of the item we want to change
+     * @param newPrice The new price of given item
+     */
+    public void updatePriceOfItemByID(int id, double newPrice){
+        try{
             // read the file as a string
             String fileContent = Files.readString(stockFilePath);
             JSONObject stock = new JSONObject(fileContent);
 
-            // add the new stock to the file
-            stock.put(String.valueOf(stockID), newStock);
+            // get the item
+            JSONObject item = stock.getJSONObject(String.valueOf(id));
+
+            // update the price
+            item.put("cost", newPrice);
+
+            // update the stock
+            stock.put(String.valueOf(id), item);
 
             // write to the file directly
             Files.write(stockFilePath, stock.toString(4).getBytes());
-
-            // stock successfully added increment the stockID
-            incrementStockID();
         }
         catch(Exception e){
             // if there is an error then return the default height
-            System.err.println("Error adding to the stock.json file: " + e.getMessage());
+            System.err.println("Error updating price of item in stock.json: " + e.getMessage());
         }
-        
     }
+
+    /**
+     * Update the price of an item by using a Name
+     * @param name The name of the item we want to change the price of
+     * @param newPrice The new price of the item
+     */
+    public void updatePriceOfItemByName(String name, double newPrice){
+        try{
+            // read the file as a string
+            String fileContent = Files.readString(stockFilePath);
+            JSONObject stock = new JSONObject(fileContent);
+
+            // iterate over the stock items
+            for (String key: stock.keySet()){
+                JSONObject stockItem = stock.getJSONObject(key);
+                if (stockItem.getString("name").equals(name)){
+                    // update the price
+                    stockItem.put("cost", newPrice);
+
+                    // update the stock
+                    stock.put(key, stockItem);
+
+                    // write to the file directly
+                    Files.write(stockFilePath, stock.toString(4).getBytes());
+                }
+            }
+        }
+        catch(Exception e){
+            // if there is an error then return the default height
+            System.err.println("Error updating price of item in stock.json: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Update the count of an item by using an ID
+     * @param id The id of the item we want to change
+     * @param newCount The new count of given item
+     */
+    public void updateCountByID(int id, int newCount){
+        try{
+            // read the file as a string
+            String fileContent = Files.readString(stockFilePath);
+            JSONObject stock = new JSONObject(fileContent);
+
+            // get the item
+            JSONObject item = stock.getJSONObject(String.valueOf(id));
+
+            // update the price
+            item.put("count", newCount);
+
+            // update the stock
+            stock.put(String.valueOf(id), item);
+
+            // write to the file directly
+            Files.write(stockFilePath, stock.toString(4).getBytes());
+        }
+        catch(Exception e){
+            // if there is an error then return the default height
+            System.err.println("Error updating count of item in stock.json: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Update the count of an item by using a Name
+     * @param name The name of the item we want to change the count of
+     * @param newCount The new count of the item
+     */
+    public void updateCountByName(String name, int newCount){
+        try{
+            // read the file as a string
+            String fileContent = Files.readString(stockFilePath);
+            JSONObject stock = new JSONObject(fileContent);
+
+            // iterate over the stock items
+            for (String key: stock.keySet()){
+                JSONObject stockItem = stock.getJSONObject(key);
+                if (stockItem.getString("name").equals(name)){
+                    // update the price
+                    stockItem.put("count", newCount);
+
+                    // update the stock
+                    stock.put(key, stockItem);
+
+                    // write to the file directly
+                    Files.write(stockFilePath, stock.toString(4).getBytes());
+                }
+            }
+        }
+        catch(Exception e){
+            // if there is an error then return the default height
+            System.err.println("Error updating count of item in stock.json: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Increment the count of an item by using an ID
+     * @param id The id of the item we want to change
+     */
+    public void incrementCountByID(int id){
+        try{
+            // read the file as a string
+            String fileContent = Files.readString(stockFilePath);
+            JSONObject stock = new JSONObject(fileContent);
+
+            // get the item
+            JSONObject item = stock.getJSONObject(String.valueOf(id));
+
+            // update the count
+            int count = item.getInt("count");
+            count++;
+            item.put("count", count);
+
+            // update the stock
+            stock.put(String.valueOf(id), item);
+
+            // write to the file directly
+            Files.write(stockFilePath, stock.toString(4).getBytes());
+        }
+        catch(Exception e){
+            // if there is an error then return the default height
+            System.err.println("Error updating count of item in stock.json: " + e.getMessage());
+        }
+    
+    }
+
+    /**
+     * Increment the count of an item by name
+     * @param name The name of the item we want to change
+     */
+    public void incrementCountByName(String name){
+        try{
+            // read the file as a string
+            String fileContent = Files.readString(stockFilePath);
+            JSONObject stock = new JSONObject(fileContent);
+
+            // iterate over the stock items
+            for (String key: stock.keySet()){
+                JSONObject stockItem = stock.getJSONObject(key);
+                if (stockItem.getString("name").equals(name)){
+                    // update the count
+                    int count = stockItem.getInt("count");
+                    count++;
+                    stockItem.put("count", count);
+
+                    // update the stock
+                    stock.put(key, stockItem);
+
+                    // write to the file directly
+                    Files.write(stockFilePath, stock.toString(4).getBytes());
+                }
+            }
+        }
+        catch(Exception e){
+            // if there is an error then return the default height
+            System.err.println("Error updating count of item in stock.json: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Decrement the count of an item by using an ID
+     * @param id The id of the item we want to change
+     */
+    public void decrementCountByID(int id){
+        try{
+            // read the file as a string
+            String fileContent = Files.readString(stockFilePath);
+            JSONObject stock = new JSONObject(fileContent);
+
+            // get the item
+            JSONObject item = stock.getJSONObject(String.valueOf(id));
+
+            // update the count
+            int count = item.getInt("count");
+            count--;
+            item.put("count", count);
+
+            // update the stock
+            stock.put(String.valueOf(id), item);
+
+            // write to the file directly
+            Files.write(stockFilePath, stock.toString(4).getBytes());
+        }
+        catch(Exception e){
+            // if there is an error then return the default height
+            System.err.println("Error updating count of item in stock.json: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Decrement the count of an item by name
+     * @param name The name of the item we want to change
+     */
+    public void decrementCountByName(String name){
+        try{
+            // read the file as a string
+            String fileContent = Files.readString(stockFilePath);
+            JSONObject stock = new JSONObject(fileContent);
+
+            // iterate over the stock items
+            for (String key: stock.keySet()){
+                JSONObject stockItem = stock.getJSONObject(key);
+                if (stockItem.getString("name").equals(name)){
+                    // update the count
+                    int count = stockItem.getInt("count");
+                    count--;
+                    stockItem.put("count", count);
+
+                    // update the stock
+                    stock.put(key, stockItem);
+
+                    // write to the file directly
+                    Files.write(stockFilePath, stock.toString(4).getBytes());
+                }
+            }
+        }
+        catch(Exception e){
+            // if there is an error then return the default height
+            System.err.println("Error updating count of item in stock.json: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Remove an item from the stock.json file by using an ID
+     * Do not adjust other stock IDs instead track unused IDs in the sysfiles.json file
+     * @param id of the item we want to remove
+     */
+    public void removeStockItemWithID(int id){
+        try{
+            // read the file as a string
+            String fileContent = Files.readString(stockFilePath);
+            JSONObject stock = new JSONObject(fileContent);
+
+            if(stock.keySet().contains(String.valueOf(id))){
+                // remove the item
+                stock.remove(String.valueOf(id));
+
+                // write to the file directly
+                Files.write(stockFilePath, stock.toString(4).getBytes());
+
+                // add the id to the unusedIDs array
+                addIDToUnusedIDs(id);
+            }
+            else{
+                System.err.println("Item does not exist in the stock.json file");
+            }
+
+            
+        }
+        catch(Exception e){
+            // if there is an error then return the default height
+            System.err.println("Error removing item from stock.json: " + e.getMessage());
+        }
+    
+    }
+
+    /**
+     * Add the id we removed to unused IDs
+     * @param id The id we want to add
+     */
+    public void addIDToUnusedIDs(int id){
+        try{
+            // read the file as a string
+            String fileContent = Files.readString(sysfilesFilePath);
+            JSONObject sysfiles = new JSONObject(fileContent);
+
+            // get the array
+            JSONArray unusedIDs = sysfiles.getJSONArray("unusedIDs");
+
+            // add the id to the array
+            unusedIDs.put(id);
+
+            // update the sysfiles
+            sysfiles.put("unusedIDs", unusedIDs);
+
+            // write to the file directly
+            Files.write(sysfilesFilePath, sysfiles.toString(4).getBytes());
+        }
+        catch(Exception e){
+            // if there is an error then return the default height
+            System.err.println("Error adding id to unusedIDs in sysfiles.json: " + e.getMessage());
+        }
+    
+    }
+
+    /*
+     * ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     * END OF THE FILE WRITING SCRIPTS
+     * ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     */
 }

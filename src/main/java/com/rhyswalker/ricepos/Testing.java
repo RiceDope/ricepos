@@ -16,9 +16,13 @@ public class Testing {
 
         FileManagement fileManagement = new FileManagement();
 
-        fileManagement.addStock(100, 50, "Hairdryer");
+        // fileManagement.addStock(10, 50, "Brush");
 
-        System.out.println(fileManagement.getStockByID(1));
+        System.out.println(fileManagement.getStockByName("Brush"));
+
+        fileManagement.removeStockItemWithID(2);
+
+        System.out.println(fileManagement.getStockByName("Brush"));
 
     }
 }
