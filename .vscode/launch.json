@@ -3,16 +3,9 @@
     "configurations": [
         {
             "type": "java",
-            "name": "Test",
+            "name": "Testing",
             "request": "launch",
-            "mainClass": "com.rhyswalker.ricepos.Test",
-            "projectName": "ricepos"
-        },
-        {
-            "type": "java",
-            "name": "Test",
-            "request": "launch",
-            "mainClass": "com.rhyswalker.ricepos/com.rhyswalker.ricepos.Test",
+            "mainClass": "com.rhyswalker.ricepos/com.rhyswalker.ricepos.Testing",
             "projectName": "ricepos"
         },
         {
@@ -24,9 +17,12 @@
         },
         {
             "type": "java",
-            "name": "App",
+            "name": "Test",
             "request": "launch",
-            "mainClass": "com.rhyswalker.ricepos.App.App",
+            "mainClass": "com.rhyswalker.ricepos.Test",
+            "modulePaths": [
+                "C:/Program Files/Java/javafx-sdk-21.0.1/lib"
+            ],
             "projectName": "ricepos"
         },
         {
@@ -34,6 +30,9 @@
             "name": "Pos",
             "request": "launch",
             "mainClass": "com.rhyswalker.ricepos.Pos",
+            "modulePaths": [
+                "C:/Program Files/Java/javafx-sdk-21.0.1/lib"
+            ],
             "projectName": "ricepos"
         },
         {
@@ -41,6 +40,9 @@
             "name": "App",
             "request": "launch",
             "mainClass": "com.rhyswalker.ricepos.App",
+            "modulePaths": [
+                "C:/Program Files/Java/javafx-sdk-21.0.1/lib"
+            ],
             "projectName": "ricepos"
         },
         {
@@ -48,7 +50,9 @@
             "name": "Main",
             "request": "launch",
             "mainClass": "Main",
-            "vmArgs": "--module-path \"C:/Program Files/Java/javafx-sdk-21.0.1/lib\" --add-modules javafx.controls,javafx.fxml",
+            "modulePaths": [
+                "C:/Program Files/Java/javafx-sdk-21.0.1/lib"
+            ],
             "args": ""
         },
         {
@@ -56,7 +60,9 @@
             "name": "GUI",
             "request": "launch",
             "mainClass": "GUI",
-            "vmArgs": "--module-path \"C:/Program Files/Java/javafx-sdk-21.0.1/lib\" --add-modules javafx.controls,javafx.fxml",
+            "modulePaths": [
+                "C:/Program Files/Java/javafx-sdk-21.0.1/lib"
+            ],
             "args": ""
         }
     ]

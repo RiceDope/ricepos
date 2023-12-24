@@ -111,7 +111,7 @@ public class Pos{
         // create an event handler for the button
         stock.setOnAction(e -> {
             // update the button
-            updateGUI(stock);
+            app.stockManagementButtonClicked();
         });
 
         // create the user management button
@@ -120,7 +120,16 @@ public class Pos{
         // create an event handler for the button
         userManagement.setOnAction(e -> {
             // update the button
-            updateGUI(userManagement);
+            app.userManagementButtonClicked();
+        });
+
+        // create the user management button
+        Button reportsButton = new Button("Reports");
+
+        // create an event handler for the button
+        reportsButton.setOnAction(e -> {
+            // update the button
+            app.reportsButtonClicked();
         });
 
         // format the buttons to fill the whole VBox and get colour settings
@@ -128,9 +137,11 @@ public class Pos{
         stock.setMaxWidth(Double.MAX_VALUE);
         userManagement.getStyleClass().add("left-buttons");
         userManagement.setMaxWidth(Double.MAX_VALUE);
+        reportsButton.getStyleClass().add("left-buttons");
+        reportsButton.setMaxWidth(Double.MAX_VALUE);
 
         // use a vbox to set organise the buttons
-        VBox managerOptions = new VBox(stock, userManagement);
+        VBox managerOptions = new VBox(stock, userManagement, reportsButton);
 
         // apply styling to the box
         managerOptions.getStyleClass().addAll("leftBox");

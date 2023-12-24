@@ -24,6 +24,9 @@ public class App extends Application{
     // different screens for access in any function
     private Pos posScreen;
     private Login loginScreen;
+    private Reports reportsScreen;
+    private UserManagement userManagementScreen;
+    private StockManagement stockManagementScreen;
 
     // so we can access screen dimensions from anywhere
     private int height;
@@ -32,6 +35,9 @@ public class App extends Application{
     // so we can access the scenes from anywhere
     private Scene loginScene;
     private Scene posScene;
+    private Scene reportsScene;
+    private Scene userManagementScene;
+    private Scene stockManagementScene;
 
     // so we can access the file manager from anywhere
     private FileManagement fileManagement;
@@ -107,7 +113,7 @@ public class App extends Application{
                 // create the user object
                 currentUser = new User(user.getString("username"), user.getString("fullName"), user.getBoolean("manager"));
 
-                // now create and launch the pos screen
+                // create and show the scene
                 posScreen = new Pos(this);
                 createPosScene();
                 showPosScreen();
@@ -121,7 +127,33 @@ public class App extends Application{
             // handle the user not found
             System.out.println("User not found");
         }
-        
+    }
+
+    /*
+     * Function that is called when the reports button is clicked
+     */
+    public void reportsButtonClicked(){
+        reportsScreen = new Reports(this);
+        createReportsScene();
+        showReportsScreen();
+    }
+
+    /*
+     * Function that is called when the user management button is clicked
+     */
+    public void userManagementButtonClicked(){
+        userManagementScreen = new UserManagement(this);
+        createUserManagementScene();
+        showUserManagementScreen();
+    }
+
+    /* 
+     * Function that is called when the stock management button is clicked
+     */
+    public void stockManagementButtonClicked(){
+        stockManagementScreen = new StockManagement(this);
+        createStockManagementScene();
+        showStockManagementScreen();
     }
 
     /*
@@ -132,14 +164,41 @@ public class App extends Application{
         loginScene.getStylesheets().add(getClass().getResource("/styles/login.css").toExternalForm());
     }
 
+    /**
+     * Function that creates the pos screen
+     */
     private void createPosScene() {
         posScene = new Scene(posScreen.getRoot(), width, height);
         posScene.getStylesheets().add(getClass().getResource("/styles/pos.css").toExternalForm());
     }
 
+    /*
+     * Function that creates the reports screen
+     */
+    private void createReportsScene() {
+        reportsScene = new Scene(reportsScreen.getRoot(), width, height);
+        reportsScene.getStylesheets().add(getClass().getResource("/styles/reports.css").toExternalForm());
+    }
+
+    /*
+     * Function that creates the user management screen
+     */
+    private void createUserManagementScene() {
+        userManagementScene = new Scene(userManagementScreen.getRoot(), width, height);
+        userManagementScene.getStylesheets().add(getClass().getResource("/styles/usermanagement.css").toExternalForm());
+    }
+
+    /*
+     * Function that creates the stock management screen
+     */
+    private void createStockManagementScene() {
+        stockManagementScene = new Scene(stockManagementScreen.getRoot(), width, height);
+        stockManagementScene.getStylesheets().add(getClass().getResource("/styles/stockmanagement.css").toExternalForm());
+    }
+
     
     /*
-     * Functions that show the pos screens
+     * Functions that show the pos screen
      */
     public void showPosScreen() {
         primaryStage.setScene(posScene);
@@ -153,6 +212,33 @@ public class App extends Application{
     public void showLoginScreen() {
         primaryStage.setScene(loginScene);
         primaryStage.setTitle("Login Screen");
+        primaryStage.show();
+    }
+
+    /**
+     * Function that shows the reports screen
+     */
+    public void showReportsScreen() {
+        primaryStage.setScene(reportsScene);
+        primaryStage.setTitle("Reports Screen");
+        primaryStage.show();
+    }
+
+    /*
+     * Functions that show the user management screen
+     */
+    public void showUserManagementScreen() {
+        primaryStage.setScene(userManagementScene);
+        primaryStage.setTitle("User Management Screen");
+        primaryStage.show();
+    }
+
+    /*
+     * Functions that show the stock management screen
+     */
+    public void showStockManagementScreen() {
+        primaryStage.setScene(stockManagementScene);
+        primaryStage.setTitle("Stock Management Screen");
         primaryStage.show();
     }
 

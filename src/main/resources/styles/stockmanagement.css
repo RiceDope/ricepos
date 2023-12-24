@@ -1,0 +1,15 @@
+/* PATH: styles/stockmanagement.css */
+ 
+/* styling for the title of the page */
+
+.title {
+    -fx-alignment: center;
+}
+
+.title-text {
+    -fx-fill: grey;
+    -fx-font-size: 30px;
+    -fx-font-weight: bold;
+}
+
+/* END */

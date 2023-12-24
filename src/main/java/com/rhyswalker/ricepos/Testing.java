@@ -8,14 +8,17 @@ package com.rhyswalker.ricepos;
  * @since 2023-12-23
  */
 
-public class Test {
+import org.json.JSONObject;
+
+public class Testing {
 
     public static void main(String[] args) {
 
         FileManagement fileManagement = new FileManagement();
 
-        fileManagement.getListOfUsers();
+        fileManagement.addStock(100, 50, "Hairdryer");
+
+        System.out.println(fileManagement.getStockByID(1));
 
     }
-
 }

@@ -1,6 +1,6 @@
 # Welcome to RicePos
 
-*No current messages*
+*Login as manager for functionality*
 
 The aim of the project is to create a rough point of sale system. This is my first attempt with using OpenJfx and Maven. Any important messages will be displayed at the top of this README in *italics*.
 
@@ -81,8 +81,11 @@ This is the file containing all of the users data and information. Currently sto
 ### customisation.json
 This is the file containing all custom settings that will be applied globaly throughout the application. Window size is the first one that I will be adding.
 
+### sysfiles.json
+This will track data like current receiptID current stockID. Just variables that the system will need to track
+
 ### stock.json
-This is the file that contains all of the details on stock that can be processed. (Count, Id, Cost, Name)
+This is the file that contains all of the details on stock that can be processed. (Count, id, Cost, Name)
 
 ### purchases.json
 This is the file that will count all of the purchases that have been made. (ReceiptID, itemsInTransaction{id, amountSold}, transactionValue, tenderType, beenRefunded)
@@ -91,9 +94,16 @@ This is the file that will count all of the purchases that have been made. (Rece
 This is the file that will count all of the refunds that have been processed through the till (purchases.ReceiptId, reason(Of specified list))
 
 ## Recent Updates
-- Created projectbreakdown.md
-- Added manager options as placeholders
-- Moved logout button to left side
+- Added groundwork for StockManagement.java, UserManagement.java and Reports.java
+- FileManagement.java has been updated to include stock.json and sysfiles.json
+- Can now add a stock item to stock.json
+- Can increment values inside of sysfiles.json
+- Can search for a stock item by its ID
+- Added errors.md
+
+## Known issues
+- Need to add check to make sure that dupilcate names cannot be inputed. Despite having unique IDs they need to have Unique names to make searching by name possible.
+- Description needs to be added to stock.json to allow differentiation between names of similar type.
 
 ## Links
 These are links to sites that helped me while developing the project or software that you need to run the program.
