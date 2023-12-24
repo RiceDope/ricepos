@@ -5,7 +5,7 @@ package com.rhyswalker.ricepos;
  * This is in a very much testing state at the moment. Will be updated as the project progresses.
  * 
  * @author Rhys Walker
- * @version 0.1
+ * @version 0.9
  * @since 2023-12-23
  */
 
@@ -60,7 +60,7 @@ public class Login{
 
     private HBox createTitle(){
         // create the text to be disaplyed on the title
-        Text titleText = new Text("RicePOS");
+        Text titleText = new Text("Rice POS");
         titleText.getStyleClass().add("title-text");
         HBox hbox = new HBox(titleText);
         hbox.getStyleClass().add("title");

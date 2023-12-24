@@ -5,7 +5,7 @@ package com.rhyswalker.ricepos;
  * By default the application will create a directory in the users home directory.
  * 
  * @author Rhys Walker
- * @version 0.5
+ * @version 0.6
  * @since 2023-12-24
  */
 
@@ -925,7 +925,37 @@ public class FileManagement {
             // if there is an error then return the default height
             System.err.println("Error removing item from stock.json: " + e.getMessage());
         }
-    
+    }
+
+    /**
+     * Remove an item from the stock.json file by using a name
+     * @param name The name of the item we want to remove
+     */
+    public void removeStockItemWithName(String name){
+        try{
+            // read the file as a string
+            String fileContent = Files.readString(stockFilePath);
+            JSONObject stock = new JSONObject(fileContent);
+
+            // iterate over the stock items
+            for (String key: stock.keySet()){
+                JSONObject stockItem = stock.getJSONObject(key);
+                if (stockItem.getString("name").equals(name)){
+                    // remove the item
+                    stock.remove(key);
+
+                    // write to the file directly
+                    Files.write(stockFilePath, stock.toString(4).getBytes());
+
+                    // add the id to the unusedIDs array
+                    addIDToUnusedIDs(Integer.parseInt(key));
+                }
+            }
+        }
+        catch(Exception e){
+            // if there is an error then return the default height
+            System.err.println("Error removing item from stock.json: " + e.getMessage());
+        }
     }
 
     /**

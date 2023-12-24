@@ -5,7 +5,7 @@ package com.rhyswalker.ricepos;
  * It is responsible for the successfull boot of the application with all customised settings and such.
  * 
  * @author Rhys Walker
- * @version 0.3
+ * @version 0.5
  * @since 2023-12-24
  */
 
@@ -38,9 +38,10 @@ public class App extends Application{
     private Scene reportsScene;
     private Scene userManagementScene;
     private Scene stockManagementScene;
+    
 
     // so we can access the file manager from anywhere
-    private FileManagement fileManagement;
+    public FileManagement fileManagement;
 
     // the current user object
     private User currentUser;

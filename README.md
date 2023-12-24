@@ -1,12 +1,13 @@
 # Welcome to RicePos
 
-*Login as manager for functionality*
+*Merry Christmas Everyone*
 
 The aim of the project is to create a rough point of sale system. This is my first attempt with using OpenJfx and Maven. Any important messages will be displayed at the top of this README in *italics*.
 
 ## Notices
-- The project creates a file in your *user.home* directory called *riceposfiles* you may delete this file as and when you wish. It creates this any time you run the project.
+- The project creates a file in your *user.home* directory called *riceposfiles* you may delete this file as and when you wish. It creates this any time you run the project. Doing so will result in the loss of stock added to the system.
 - The default password for defaultemployee and default manager is *password*.
+- Development pause over the christmas period from the 24/12/2023 - 31/12/2023. Possible exception for the 26th. But no planned development over this period.
 
 ## Running the project
 *This may be simple to some but for me this took a while to get my head around so here goes*
@@ -97,9 +98,16 @@ This is the file that will count all of the refunds that have been processed thr
 ## Recent Updates
 - Added functions for stock management to FileManagement.java. Can update by name or ID
 - Any items that are removed the ID is tracked by sysfiles.json.
+- Got the allStock tab working
+- Got the addStock tab working
+- Got the editStock tab working
+- Got the removeStock tab working
+- FileManager should be complete for managing stock (Functions still needed for managing purchases.json and refunds.json)
 
 ## Known issues
 - Description needs to be added to stock.json to allow differentiation between names of similar type.
+- Input needs to be validity tested when adding stock and updating stock. Currently relying on user to do things correctly. *Error if inputs are text*
+- If you resize the window after execution when different scenes are loaded it will change back to the resolution specified in customisations.json
 
 ## Links
 These are links to sites that helped me while developing the project or software that you need to run the program.
@@ -118,6 +126,7 @@ These are links to sites that helped me while developing the project or software
 - https://java-decompiler.github.io/
 - https://www.geeksforgeeks.org/sha-256-hash-in-java/
 - https://java-decompiler.github.io/
+- https://jenkov.com/tutorials/javafx/tabpane.html
 
 
 # Notes
@@ -131,3 +140,5 @@ These are links to sites that helped me while developing the project or software
 - Big thanks to the java decompiler project which once again helped me with checking the .jar files and finding out why things were not working.
 
 - Thanks to geeksforgeeks.com for help with the code for Hash.java. I would not have been able to create that without the source code from their website check the links section for the page.
+
+- Project is reaching a point where development will slow down. Commits will be more infrequent and updates should be bigger. This means that there could be things that I will miss while writing these readmes.
