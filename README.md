@@ -94,19 +94,11 @@ This is the file that will count all of the purchases that have been made. (Rece
 This is the file that will count all of the refunds that have been processed through the till (purchases.ReceiptId, reason(Of specified list))
 
 ## Recent Updates
-- Moved unused IDs to a folder called removed.json which tracks stock that has been removed - stockID, cost and name.
-- Removed UnusedIDs field in sysfiles completely (Was pointless)
-- Added custom data type called Transaction
-- Added function to add a receipt to receipts.json
-- Added the till tab - processes payments correctly given a payment type. Seach is by ID only. Idea is IDs would be on the product and could be scanned? or just read off of the product back.
-- Stock decrements by correct amount when payment is processed
-- Default stock no longer an element in the program
-- Admin login exists and cannot be removed
+- Scene now tracks size
 
 ## Known issues
 - Description needs to be added to stock.json to allow differentiation between names of similar type.
 - Input needs to be validity tested when adding stock and updating stock. Currently relying on user to do things correctly. *Error if inputs are text*
-- If you resize the window after execution when different scenes are loaded it will change back to the resolution specified in customisations.json
 - Usernames need to be unique (Will add)
 - If username is changed to the username of a person that already exists then it will overwrite the existing user causing problems
 - NoSuchAlgorithmException needs to be organised to work correctly 100%

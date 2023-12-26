@@ -204,7 +204,14 @@ public class App extends Application{
      * Functions that show the pos screen
      */
     public void showPosScreen() {
+
+        // get the current windows size
+        double curHeight = primaryStage.getHeight();
+        double curWidth = primaryStage.getWidth();
+
         primaryStage.setScene(posScene);
+        primaryStage.setHeight(curHeight);
+        primaryStage.setWidth(curWidth);
         primaryStage.setTitle("POS Screen");
         primaryStage.show();
     }
@@ -213,7 +220,14 @@ public class App extends Application{
      * Function that shows the login screen
      */
     public void showLoginScreen() {
+
+        // get the current windows size
+        double curHeight = primaryStage.getHeight();
+        double curWidth = primaryStage.getWidth();
+
         primaryStage.setScene(loginScene);
+        primaryStage.setHeight(curHeight);
+        primaryStage.setWidth(curWidth);
         primaryStage.setTitle("Login Screen");
         primaryStage.show();
     }
@@ -222,7 +236,14 @@ public class App extends Application{
      * Function that shows the reports screen
      */
     public void showReportsScreen() {
+
+        // get the current windows size
+        double curHeight = primaryStage.getHeight();
+        double curWidth = primaryStage.getWidth();
+
         primaryStage.setScene(reportsScene);
+        primaryStage.setHeight(curHeight);
+        primaryStage.setWidth(curWidth);
         primaryStage.setTitle("Reports Screen");
         primaryStage.show();
     }
@@ -231,7 +252,14 @@ public class App extends Application{
      * Functions that show the user management screen
      */
     public void showUserManagementScreen() {
+
+        // get the current windows size
+        double curHeight = primaryStage.getHeight();
+        double curWidth = primaryStage.getWidth();
+
         primaryStage.setScene(userManagementScene);
+        primaryStage.setHeight(curHeight);
+        primaryStage.setWidth(curWidth);
         primaryStage.setTitle("User Management Screen");
         primaryStage.show();
     }
@@ -240,7 +268,14 @@ public class App extends Application{
      * Functions that show the stock management screen
      */
     public void showStockManagementScreen() {
+
+        // get the current windows size
+        double curHeight = primaryStage.getHeight();
+        double curWidth = primaryStage.getWidth();
+
         primaryStage.setScene(stockManagementScene);
+        primaryStage.setHeight(curHeight);
+        primaryStage.setWidth(curWidth);
         primaryStage.setTitle("Stock Management Screen");
         primaryStage.show();
     }
