@@ -1,6 +1,6 @@
 # Welcome to RicePos
 
-*defaultManager changed to admin*
+*Added till functions*
 
 The aim of the project is to create a rough point of sale system. This is my first attempt with using OpenJfx and Maven. Any important messages will be displayed at the top of this README in *italics*.
 
