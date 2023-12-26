@@ -7,7 +7,7 @@ public class Testing{
         // create the file management object
         FileManagement fileManagement = new FileManagement();
 
-        fileManagement.removeStockItemWithName("Candle");
+        fileManagement.removeUser("rhysWalker");
 
     }
 }

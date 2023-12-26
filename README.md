@@ -1,12 +1,12 @@
 # Welcome to RicePos
 
-*Merry Christmas Everyone*
+*defaultManager changed to admin*
 
 The aim of the project is to create a rough point of sale system. This is my first attempt with using OpenJfx and Maven. Any important messages will be displayed at the top of this README in *italics*.
 
 ## Notices
 - The project creates a file in your *user.home* directory called *riceposfiles* you may delete this file as and when you wish. It creates this any time you run the project. Doing so will result in the loss of stock added to the system.
-- The default password for defaultemployee and default manager is *password*.
+- The default password for admin is *password*.
 - Development pause over the christmas period from the 24/12/2023 - 31/12/2023. Possible exception for the 26th. But no planned development over this period.
 
 ## Running the project
@@ -24,9 +24,7 @@ java --module-path "C:/Program Files/Java/javafx-sdk-21.0.1/lib" --add-modules j
 The new way uses a plugin called *Maven-Shade-Plugin* in order to package the dependencies inside of the jar. Here are the steps to run.
 ```
 // creating the executable
-mvn clean
-mvn compile
-mvn package
+mvn clean compile package
 
 // execution
 mvn exec:java
@@ -96,18 +94,20 @@ This is the file that will count all of the purchases that have been made. (Rece
 This is the file that will count all of the refunds that have been processed through the till (purchases.ReceiptId, reason(Of specified list))
 
 ## Recent Updates
-- Added functions for stock management to FileManagement.java. Can update by name or ID
-- Any items that are removed the ID is tracked by sysfiles.json.
-- Got the allStock tab working
-- Got the addStock tab working
-- Got the editStock tab working
-- Got the removeStock tab working
-- FileManager should be complete for managing stock (Functions still needed for managing purchases.json and refunds.json)
+- Finalised the user management screen for functionality
+- Removed default employee and manager to replace with admin
+- Minor improvements
 
 ## Known issues
 - Description needs to be added to stock.json to allow differentiation between names of similar type.
 - Input needs to be validity tested when adding stock and updating stock. Currently relying on user to do things correctly. *Error if inputs are text*
 - If you resize the window after execution when different scenes are loaded it will change back to the resolution specified in customisations.json
+- Usernames need to be unique (Will add)
+- If username is changed to the username of a person that already exists then it will overwrite the existing user causing problems
+- Admin login does not exist
+- Default stock shows when loading allStock
+- NoSuchAlgorithmException needs to be organised to work correctly 100%
+- General Code Cleanliness needs to be updated to be maintainable
 
 ## Links
 These are links to sites that helped me while developing the project or software that you need to run the program.
@@ -142,3 +142,5 @@ These are links to sites that helped me while developing the project or software
 - Thanks to geeksforgeeks.com for help with the code for Hash.java. I would not have been able to create that without the source code from their website check the links section for the page.
 
 - Project is reaching a point where development will slow down. Commits will be more infrequent and updates should be bigger. This means that there could be things that I will miss while writing these readmes.
+
+- Code is not in its best shape and improvements will be made as time goes on. Its a known issue for me that my code gets messey as it gets more complex or larger. Once the applcation has been completed then there will be consideration to maintainability and improvements. This will take time and refactoring is maybe my least favorite part of coding.

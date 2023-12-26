@@ -13,6 +13,7 @@ import java.nio.file.*;
 import org.json.JSONObject;
 import org.json.JSONArray;
 import java.util.ArrayList;
+import java.security.NoSuchAlgorithmException;
 
 public class FileManagement {
 
@@ -247,24 +248,16 @@ public class FileManagement {
      */
     private JSONObject defaultUsers(){
 
-        // json object to contain all of the data for the default manager
+        // json object to contain all of the data for the default manager called admin
         JSONObject defaultManager = new JSONObject();
-        defaultManager.put("username", "defaultmanager");
+        defaultManager.put("username", "admin");
         defaultManager.put("password", "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8"); // default password is password
-        defaultManager.put("fullName", "Default Manager");
+        defaultManager.put("fullName", "Admin");
         defaultManager.put("manager", true);
-
-        // json object to contain all of the data for the default employee
-        JSONObject defaultEmployee = new JSONObject();
-        defaultEmployee.put("username", "defaultemployee");
-        defaultEmployee.put("password", "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8"); // default password is password
-        defaultEmployee.put("fullName", "Default Employee");
-        defaultEmployee.put("manager", false);
 
         // add to the default key-value pair
         JSONObject usersJson = new JSONObject();
         usersJson.put("defaultmanager", defaultManager);
-        usersJson.put("defaultemployee", defaultEmployee);
 
         return usersJson;
     }
@@ -474,6 +467,24 @@ public class FileManagement {
     }
 
     /**
+     * Gets all of the users in the users.json file
+     * @return A JSONObject containing all of the stock items
+     */
+    public JSONObject getAllUsers(){
+        try{
+            // read the file as a string and then return the height to the application
+            String fileContent = Files.readString(usersFilePath);
+            JSONObject usersJson = new JSONObject(fileContent);
+            return usersJson;
+        }
+        catch(Exception e){
+            // if there is an error then return the default height
+            System.err.println("Error reading users.json: " + e.getMessage());
+            return null;
+        }
+    }
+
+    /**
      * Get a specific stock item by its name
      * @param name The name of the stock item
      * @return A JSONObject containing the stock item
@@ -498,6 +509,35 @@ public class FileManagement {
         catch(Exception e){
             // if there is an error then return the default height
             System.err.println("Error reading stock.json: " + e.getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * Get a users full name based on their username
+     * @param username The users username
+     * @return A string containing the fullName
+     */
+    public String getUsersFullName(String username){
+        try{
+            // read the file as a string and then return the height to the application
+            String fileContent = Files.readString(usersFilePath);
+            JSONObject usersJson = new JSONObject(fileContent);
+
+            // iterate over the users
+            for (String key: usersJson.keySet()){
+                JSONObject user = usersJson.getJSONObject(key);
+                if (user.getString("username").equals(username)){
+                    return user.getString("fullName");
+                }
+            }
+
+            // if we get here then the user does not exist
+            return null;
+        }
+        catch(Exception e){
+            // if there is an error then return the default height
+            System.err.println("Error reading users.json: " + e.getMessage());
             return null;
         }
     }
@@ -527,10 +567,12 @@ public class FileManagement {
             String fileContent = Files.readString(usersFilePath);
             JSONObject usersJson = new JSONObject(fileContent);
 
+            String hashedPassword = com.rhyswalker.ricepos.Hash.toHexString(com.rhyswalker.ricepos.Hash.getSHA(password));
+
             // now create a new json object containing the new user
             JSONObject newUser = new JSONObject();
             newUser.put("username", username);
-            newUser.put("password", password);
+            newUser.put("password", hashedPassword);
             newUser.put("fullName", fullName);
             newUser.put("manager", manager);
 
@@ -985,6 +1027,104 @@ public class FileManagement {
             System.err.println("Error adding id to unusedIDs in sysfiles.json: " + e.getMessage());
         }
     
+    }
+
+    /**
+     * A function to update the full name of a user
+     * @param username The username of the user we want to update
+     * @param newName The new name of the user
+     */
+    public void updateUser(String username, String newName, boolean isManager){
+        try{
+            // read the file as a string
+            String fileContent = Files.readString(usersFilePath);
+            JSONObject users = new JSONObject(fileContent);
+
+            // get the user
+            JSONObject user = users.getJSONObject(username);
+
+            // update the name
+            user.put("fullName", newName);
+            user.put("manager", isManager);
+
+            // update the users
+            users.put(username, user);
+
+            // write to the file directly
+            Files.write(usersFilePath, users.toString(4).getBytes());
+        }
+        catch(Exception e){
+            // if there is an error then return the default height
+            System.err.println("Error updating full name of user in users.json: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Remove a user based on the username
+     * @param username The username of the user we want to remove
+     */
+    public void removeUser(String username){
+        try{
+            // read the file as a string
+            String fileContent = Files.readString(usersFilePath);
+            JSONObject users = new JSONObject(fileContent);
+
+            // remove the user
+            users.remove(username);
+
+            // write to the file directly
+            Files.write(usersFilePath, users.toString(4).getBytes());
+        }
+        catch(Exception e){
+            // if there is an error then return the default height
+            System.err.println("Error removing user from users.json: " + e.getMessage());
+        }
+    }
+
+    public void updateUserLoginDetails (String oldUsername, String newUsername, String newPassword){
+
+        // first get the existing object using oldUsername
+        JSONObject user = getAllUsers().getJSONObject(oldUsername);
+
+        // then call the addUser function with the new details
+        // details if manager and full name were changed wouldve already gone through updateUser
+        JSONObject newUser = new JSONObject();
+        newUser.put("username", newUsername);
+
+        if (newPassword.equals(getAllUsers().getJSONObject(oldUsername).getString("password"))){
+            // if the password is the same then we dont need to hash it again
+            newUser.put("password", newPassword);
+        }
+        else{
+            // if the password is different then we need to hash it again
+            try {
+                newUser.put("password", com.rhyswalker.ricepos.Hash.toHexString(com.rhyswalker.ricepos.Hash.getSHA(newPassword)));
+            }
+            catch (Exception e){
+                System.err.println("Error hashing password: " + e.getMessage());
+            }
+            
+        }
+        newUser.put("fullName", user.getString("fullName"));
+        newUser.put("manager", user.getBoolean("manager"));
+
+        try {
+            JSONObject usersJson = getAllUsers();
+            usersJson.put(newUsername, newUser);
+
+            Files.write(usersFilePath, usersJson.toString(4).getBytes());
+
+            // dont need to change username in this case
+            if (oldUsername.equals(newUsername)){
+                return;
+            }
+
+            // then remove the old object and add the new one
+            removeUser(oldUsername); // dont remove if adding fails
+        }
+        catch (Exception e){
+            System.err.println("Error updating user login details: " + e.getMessage());
+        }   
     }
 
     /*

@@ -84,6 +84,9 @@ public class StockManagement {
         return tabPane;
     }
 
+    /**
+     * Force a refresh of the screen to update contents
+     */
     private void forceRefresh(){
         borderPane.setCenter(createCentralOptions());
     }
@@ -125,6 +128,10 @@ public class StockManagement {
         return scrollPane;
     }
 
+    /**
+     * Create the contents of the add stock tab
+     * @return A VBox containing the options for adding stock
+     */
     private VBox createAddStockTabContents(){
 
         // create all of the text fields needed for adding a product

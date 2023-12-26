@@ -143,9 +143,15 @@ public class App extends Application{
      * Function that is called when the user management button is clicked
      */
     public void userManagementButtonClicked(){
-        userManagementScreen = new UserManagement(this);
-        createUserManagementScene();
-        showUserManagementScreen();
+        try{
+            userManagementScreen = new UserManagement(this);
+            createUserManagementScene();
+            showUserManagementScreen();
+        }
+        catch(NoSuchAlgorithmException e){
+            System.out.println("Error hashing password. In creation of user management screen");
+        }
+        
     }
 
     /* 
