@@ -6,14 +6,14 @@ package com.rhyswalker.ricepos;
  * 
  * @author Rhys Walker
  * @version 0.6
- * @since 2023-12-24
+ * @since 2023-12-26
  */
 
 import java.nio.file.*;
+import java.time.format.DateTimeFormatter;  
+import java.time.LocalDateTime;
 import org.json.JSONObject;
-import org.json.JSONArray;
 import java.util.ArrayList;
-import java.security.NoSuchAlgorithmException;
 
 public class FileManagement {
 
@@ -24,9 +24,12 @@ public class FileManagement {
     // paths to files or directories in the home directory
     private Path directoryPath;
     private Path usersFilePath;
-    private Path customisationsFilePath;
+    private static Path customisationsFilePath;
     private Path sysfilesFilePath;
     private Path stockFilePath;
+    private Path removedFilePath;
+    private Path receiptsFilePath;
+    private Path refundsFilePath;
 
     public FileManagement(){
 
@@ -48,6 +51,15 @@ public class FileManagement {
 
         // set the path to the stock.json file
         stockFilePath = Paths.get(userHome, programDirectory, "stock.json");
+
+        // set the path to the removed.json file
+        removedFilePath = Paths.get(userHome, programDirectory, "removed.json");
+
+        // set the path to the receipts file
+        receiptsFilePath = Paths.get(userHome, programDirectory, "receipts.json");
+
+        // set the path to the refunds file
+        refundsFilePath = Paths.get(userHome, programDirectory, "refunds.json");
 
         // now check whether the directory exists if not create
         if (checkDirectoryExists(directoryPath) == false){
@@ -165,7 +177,7 @@ public class FileManagement {
             System.out.println("stock.json does not exist creating file");
 
             // set the default contents of the file
-            JSONObject stockJson = defaultStock();
+            JSONObject stockJson = new JSONObject();
 
             // write to the file
             try {
@@ -175,6 +187,69 @@ public class FileManagement {
             // catch any errors
             catch (Exception e) {
                 System.err.println("Error creating stock.json: " + e.getMessage());
+            }
+        }
+
+        // check if removed.json exists
+        if (Files.exists(removedFilePath)) {
+            System.out.println("removed.json exists");
+        }
+        // if not then create the file
+        else {
+            System.out.println("removed.json does not exist creating file");
+
+            // set the default contents of the file
+            JSONObject removed = new JSONObject();
+
+            // write to the file
+            try {
+                Files.write(removedFilePath, removed.toString(4).getBytes());
+            }
+            // catch any errors
+            catch (Exception e) {
+                System.err.println("Error creating removed.json: " + e.getMessage());
+            }
+        }
+
+        // check if receipts.json exists
+        if (Files.exists(receiptsFilePath)) {
+            System.out.println("receipts.json exists");
+        }
+        // if not then create the file
+        else {
+            System.out.println("receipts.json does not exist creating file");
+
+            // set the default contents of the file
+            JSONObject receipts = new JSONObject();
+
+            // write to the file
+            try {
+                Files.write(receiptsFilePath, receipts.toString(4).getBytes());
+            }
+            // catch any errors
+            catch (Exception e) {
+                System.err.println("Error creating receipts.json: " + e.getMessage());
+            }
+        }
+
+        // check if removed.json exists
+        if (Files.exists(refundsFilePath)) {
+            System.out.println("refunds.json exists");
+        }
+        // if not then create the file
+        else {
+            System.out.println("refunds.json does not exist creating file");
+
+            // set the default contents of the file
+            JSONObject refunds = new JSONObject();
+
+            // write to the file
+            try {
+                Files.write(refundsFilePath, refunds.toString(4).getBytes());
+            }
+            // catch any errors
+            catch (Exception e) {
+                System.err.println("Error creating refunds.json: " + e.getMessage());
             }
         }
 
@@ -221,7 +296,20 @@ public class FileManagement {
             Files.write(sysfilesFilePath, defaultsysfiles().toString(4).getBytes());
 
             // create the stock.json file
-            Files.write(stockFilePath, defaultStock().toString(4).getBytes());
+            JSONObject stockJson = new JSONObject();
+            Files.write(stockFilePath, stockJson.toString(4).getBytes());
+
+            // create the removed.json file
+            JSONObject removed = new JSONObject();
+            Files.write(removedFilePath, removed.toString(4).getBytes());
+
+            // create the receipts.json file
+            JSONObject receipts = new JSONObject();
+            Files.write(receiptsFilePath, receipts.toString(4).getBytes());
+
+            // create the refunds.json file
+            JSONObject refunds = new JSONObject();
+            Files.write(refundsFilePath, refunds.toString(4).getBytes());
 
         } catch (Exception e) {
             // catch any errors
@@ -257,7 +345,7 @@ public class FileManagement {
 
         // add to the default key-value pair
         JSONObject usersJson = new JSONObject();
-        usersJson.put("defaultmanager", defaultManager);
+        usersJson.put("admin", defaultManager);
 
         return usersJson;
     }
@@ -324,11 +412,8 @@ public class FileManagement {
         // check to see if stock.json exists already if it does print an error and ask user to fix
 
         JSONObject sysfilesjson = new JSONObject();
-        sysfilesjson.put("receiptID", 0);
-        sysfilesjson.put("stockID", 0);
-        JSONArray unusedIDs = new JSONArray();
-        sysfilesjson.put("unusedIDs", unusedIDs);
-
+        sysfilesjson.put("receiptID", 1);
+        sysfilesjson.put("stockID", 1);
         return sysfilesjson;
     }
 
@@ -351,7 +436,7 @@ public class FileManagement {
        * Will read the customisations.json file and return the custom height of the application
        * @return An integer containing the height of the application
        */
-    public int getHeight(){
+    public static int getHeight(){
         try{
             // read the file as a string and then return the height to the application
             String fileContent = Files.readString(customisationsFilePath);
@@ -369,7 +454,7 @@ public class FileManagement {
     * Will read the customisations.json file and return the custom width of the application
     * @return An integer containing the width of the application
     */
-    public int getWidth(){
+    public static int getWidth(){
         try{
             // read the file as a string and then return the height to the application
             String fileContent = Files.readString(customisationsFilePath);
@@ -379,7 +464,7 @@ public class FileManagement {
         catch(Exception e){
             // if there is an error then return the default height
             System.err.println("Error reading customisations.json: " + e.getMessage());
-            return 600;
+            return 1000;
         }
     }
 
@@ -421,6 +506,20 @@ public class FileManagement {
             String fileContent = Files.readString(sysfilesFilePath);
             JSONObject sysfilesJson = new JSONObject(fileContent);
             return sysfilesJson.getInt("stockID");
+        }
+        catch(Exception e){
+            // if there is an error then return the default height
+            System.err.println("Error reading sysfiles.json: " + e.getMessage());
+            return 0;
+        }
+    }
+
+    public int getCurrentReceiptID(){
+        try{
+            // read the file as a string and then return the height to the application
+            String fileContent = Files.readString(sysfilesFilePath);
+            JSONObject sysfilesJson = new JSONObject(fileContent);
+            return sysfilesJson.getInt("receiptID");
         }
         catch(Exception e){
             // if there is an error then return the default height
@@ -948,14 +1047,14 @@ public class FileManagement {
             JSONObject stock = new JSONObject(fileContent);
 
             if(stock.keySet().contains(String.valueOf(id))){
+                // add the id to the removed.json file
+                addToRemoved(String.valueOf(id), stock.getJSONObject(String.valueOf(id)).getDouble("cost"), stock.getJSONObject(String.valueOf(id)).getString("name"));
+
                 // remove the item
                 stock.remove(String.valueOf(id));
 
                 // write to the file directly
                 Files.write(stockFilePath, stock.toString(4).getBytes());
-
-                // add the id to the unusedIDs array
-                addIDToUnusedIDs(id);
             }
             else{
                 System.err.println("Item does not exist in the stock.json file");
@@ -983,14 +1082,14 @@ public class FileManagement {
             for (String key: stock.keySet()){
                 JSONObject stockItem = stock.getJSONObject(key);
                 if (stockItem.getString("name").equals(name)){
+                    // add the id to the removed.json file
+                    addToRemoved(String.valueOf(stockItem.getInt("id")), stockItem.getDouble("cost"), stockItem.getString("name"));
+
                     // remove the item
                     stock.remove(key);
 
                     // write to the file directly
                     Files.write(stockFilePath, stock.toString(4).getBytes());
-
-                    // add the id to the unusedIDs array
-                    addIDToUnusedIDs(Integer.parseInt(key));
                 }
             }
         }
@@ -998,35 +1097,6 @@ public class FileManagement {
             // if there is an error then return the default height
             System.err.println("Error removing item from stock.json: " + e.getMessage());
         }
-    }
-
-    /**
-     * Add the id we removed to unused IDs
-     * @param id The id we want to add
-     */
-    public void addIDToUnusedIDs(int id){
-        try{
-            // read the file as a string
-            String fileContent = Files.readString(sysfilesFilePath);
-            JSONObject sysfiles = new JSONObject(fileContent);
-
-            // get the array
-            JSONArray unusedIDs = sysfiles.getJSONArray("unusedIDs");
-
-            // add the id to the array
-            unusedIDs.put(id);
-
-            // update the sysfiles
-            sysfiles.put("unusedIDs", unusedIDs);
-
-            // write to the file directly
-            Files.write(sysfilesFilePath, sysfiles.toString(4).getBytes());
-        }
-        catch(Exception e){
-            // if there is an error then return the default height
-            System.err.println("Error adding id to unusedIDs in sysfiles.json: " + e.getMessage());
-        }
-    
     }
 
     /**
@@ -1125,6 +1195,68 @@ public class FileManagement {
         catch (Exception e){
             System.err.println("Error updating user login details: " + e.getMessage());
         }   
+    }
+
+    /**
+     * Add a new stock to the removed.json file + also the date it was removed
+     * @param stockID The stockID of the item we want to add
+     * @param cost The cost for the item at time of removal
+     * @param name The name of the item we want to remove
+     */
+    public void addToRemoved(String stockID, Double cost, String name){
+        try{
+            // read the file as a string
+            String fileContent = Files.readString(removedFilePath);
+            JSONObject removed = new JSONObject(fileContent);
+
+            // get the current date
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");  
+            LocalDateTime now = LocalDateTime.now();
+            String strDate = dtf.format(now);
+
+            // create the new object
+            JSONObject removedItem = new JSONObject();
+            removedItem.put("cost", cost);
+            removedItem.put("name", name);
+            removedItem.put("date", strDate);
+
+            // add the item to the removed object
+            removed.put(stockID, removedItem);
+
+            // write to the file directly
+            Files.write(removedFilePath, removed.toString(4).getBytes());
+        }
+        catch(Exception e){
+            // if there is an error then stop and print error
+            System.err.println("Error adding item to removed.json: " + e.getMessage());
+        }
+    }
+
+    /**
+     * A function that will add a new receipt to the receipts.json file
+     * @param transaction An object called transaction that we cant take all of the details from
+     */
+    public void addReceipt (Transaction transaction){
+
+        JSONObject receipt = transaction.formatTransaction();
+
+        try{
+            // read the file as a string
+            String fileContent = Files.readString(receiptsFilePath);
+            JSONObject receipts = new JSONObject(fileContent);
+
+            // add the receipt to the receipts object
+            receipts.put(String.valueOf(getCurrentReceiptID()), receipt);
+            incrementReceiptID();
+
+            // write to the file directly
+            Files.write(receiptsFilePath, receipts.toString(4).getBytes());
+        }
+        catch(Exception e){
+            // if there is an error then stop and print error
+            System.err.println("Error adding receipt to receipts.json: " + e.getMessage());
+        }
+
     }
 
     /*

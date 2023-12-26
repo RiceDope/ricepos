@@ -28,9 +28,9 @@ public class App extends Application{
     private UserManagement userManagementScreen;
     private StockManagement stockManagementScreen;
 
-    // so we can access screen dimensions from anywhere
-    private int height;
-    private int width;
+    // so we can access screen dimensions from anywhere - access statically as to allow resizing
+    private static final int height = com.rhyswalker.ricepos.FileManagement.getHeight();
+    private static final int width = com.rhyswalker.ricepos.FileManagement.getWidth();
 
     // so we can access the scenes from anywhere
     private Scene loginScene;
@@ -57,10 +57,6 @@ public class App extends Application{
 
         // create the file management object
         fileManagement = new FileManagement();
-
-        // set the height and width properties will eventually be access from the pos_settings.json file
-        height = fileManagement.getHeight();
-        width = fileManagement.getWidth();
 
         // Create instances of the login screen all other will be created when needed
         loginScreen = new Login(this);

@@ -30,7 +30,6 @@ public class Login{
         borderPane = new BorderPane();
         borderPane.setCenter(createLogin());
         borderPane.setTop(createTitle());
-
     }
 
     /**
@@ -71,7 +70,7 @@ public class Login{
      * Returns what the root object for this scene should be
      * @return The root object forthis scene
      */
-    public javafx.scene.Parent getRoot() {
+    public BorderPane getRoot() {
         // return the root UI component for the screen
         return borderPane;
     }

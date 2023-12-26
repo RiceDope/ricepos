@@ -1,13 +1,9 @@
 package com.rhyswalker.ricepos;
 
+import java.util.ArrayList;
+
 public class Testing{
 
     public static void main(String[] args) {
-        
-        // create the file management object
-        FileManagement fileManagement = new FileManagement();
-
-        fileManagement.removeUser("rhysWalker");
-
     }
 }
