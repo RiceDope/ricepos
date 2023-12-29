@@ -27,6 +27,7 @@ public class App extends Application{
     private Reports reportsScreen;
     private UserManagement userManagementScreen;
     private StockManagement stockManagementScreen;
+    private StockList stockListScreen;
 
     // so we can access screen dimensions from anywhere - access statically as to allow resizing
     private static final int height = com.rhyswalker.ricepos.FileManagement.getHeight();
@@ -38,6 +39,7 @@ public class App extends Application{
     private Scene reportsScene;
     private Scene userManagementScene;
     private Scene stockManagementScene;
+    private Scene stockListScene;
     
 
     // so we can access the file manager from anywhere
@@ -159,12 +161,26 @@ public class App extends Application{
         showStockManagementScreen();
     }
 
+    public void stockListButtonClicked(){
+        stockListScreen = new StockList(this);
+        createStockListScene();
+        showStockListScreen();
+    }
+
     /*
      * Function that creates the login screen
      */
     private void createLoginScene() {
         loginScene = new Scene(loginScreen.getRoot(), width, height);
         loginScene.getStylesheets().add(getClass().getResource("/styles/login.css").toExternalForm());
+    }
+
+    /*
+     * Function that creates the stock list screen
+     */
+    private void createStockListScene() {
+        stockListScene = new Scene(stockListScreen.getRoot(), width, height);
+        stockListScene.getStylesheets().add(getClass().getResource("/styles/stocklist.css").toExternalForm());
     }
 
     /**
@@ -213,6 +229,22 @@ public class App extends Application{
         primaryStage.setHeight(curHeight);
         primaryStage.setWidth(curWidth);
         primaryStage.setTitle("POS Screen");
+        primaryStage.show();
+    }
+
+    /*
+     * Functions that show the stock list screen
+     */
+    public void showStockListScreen() {
+
+        // get the current windows size
+        double curHeight = primaryStage.getHeight();
+        double curWidth = primaryStage.getWidth();
+
+        primaryStage.setScene(stockListScene);
+        primaryStage.setHeight(curHeight);
+        primaryStage.setWidth(curWidth);
+        primaryStage.setTitle("Stock List Screen");
         primaryStage.show();
     }
 

@@ -5,7 +5,7 @@ package com.rhyswalker.ricepos;
  * By default the application will create a directory in the users home directory.
  * 
  * @author Rhys Walker
- * @version 0.6
+ * @version 0.8
  * @since 2023-12-26
  */
 
@@ -641,6 +641,71 @@ public class FileManagement {
         }
     }
 
+    /**
+     * Get all of the sales that have gone through the till based on receipts
+     * @return A JSONObject containing all of the sales
+     */
+    public JSONObject getAllSales(){
+        try{
+            // read the file as a string and then return the height to the application
+            String fileContent = Files.readString(receiptsFilePath);
+            JSONObject receiptsJson = new JSONObject(fileContent);
+            return receiptsJson;
+        }
+        catch(Exception e){
+            // if there is an error then return the default height
+            System.err.println("Error reading receipts.json: " + e.getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * Get a receipt by ID
+     * @param username the ID of the receipt
+     * @return A JSONObject containing the receipt
+     */
+    public JSONObject getReceiptByID(int id){
+        try{
+            // read the file as a string and then return the height to the application
+            String fileContent = Files.readString(receiptsFilePath);
+            JSONObject receiptsJson = new JSONObject(fileContent);
+
+            // iterate over the receipts
+            for (String key: receiptsJson.keySet()){
+                JSONObject receipt = receiptsJson.getJSONObject(key);
+                if (receipt.getInt("ReceiptID") == id){
+                    return receipt;
+                }
+            }
+
+            // if we get here then the receipt does not exist
+            return null;
+        }
+        catch(Exception e){
+            // if there is an error then return the default height
+            System.err.println("Error reading receipts.json: " + e.getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * Get all of the refunds that have gone through the till based on refunds
+     * @return A JSONObject containing all of the refunds
+     */
+    public JSONObject getAllRefunds(){
+        try{
+            // read the file as a string and then return the height to the application
+            String fileContent = Files.readString(refundsFilePath);
+            JSONObject refundsJson = new JSONObject(fileContent);
+            return refundsJson;
+        }
+        catch(Exception e){
+            // if there is an error then return the default height
+            System.err.println("Error reading refunds.json: " + e.getMessage());
+            return null;
+        }
+    }
+
     /*
      * ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
      * END OF THE FILE READING SCRIPTS
@@ -1257,6 +1322,53 @@ public class FileManagement {
             System.err.println("Error adding receipt to receipts.json: " + e.getMessage());
         }
 
+    }
+
+    /**
+     * Add a receipt to a file called refunds.json and remove the receipt from the receipts.json file
+     * @param refund A JSONObject containing the refund receipt
+     */
+    public void addRefund(JSONObject refund){
+        try{
+            // read the file as a string
+            String fileContent = Files.readString(refundsFilePath);
+            JSONObject refunds = new JSONObject(fileContent);
+
+            // add the receipt to the receipts object
+            refunds.put(String.valueOf(refund.getInt("ReceiptID")), refund);
+
+            // write to the file directly
+            Files.write(refundsFilePath, refunds.toString(4).getBytes());
+
+            removeReceipt(refund.getInt("ReceiptID"));
+        }
+        catch(Exception e){
+            // if there is an error then stop and print error
+            System.err.println("Error adding refund to refunds.json: " + e.getMessage());
+        }
+    
+    }
+
+    /**
+     * Remove a receipt from the receipts.json file
+     * @param receiptID The ID of the receipt we want to remove
+     */
+    public void removeReceipt(int receiptID){
+        try{
+            // read the file as a string
+            String fileContent = Files.readString(receiptsFilePath);
+            JSONObject receipts = new JSONObject(fileContent);
+
+            // remove the receipt
+            receipts.remove(String.valueOf(receiptID));
+
+            // write to the file directly
+            Files.write(receiptsFilePath, receipts.toString(4).getBytes());
+        }
+        catch(Exception e){
+            // if there is an error then stop and print error
+            System.err.println("Error removing receipt from receipts.json: " + e.getMessage());
+        }
     }
 
     /*

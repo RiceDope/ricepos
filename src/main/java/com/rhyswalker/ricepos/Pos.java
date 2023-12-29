@@ -16,6 +16,7 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Label;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 import org.json.JSONObject;
 import java.util.ArrayList;
@@ -58,8 +59,6 @@ public class Pos{
      * Creates the default options for a non manager user
      */
     private void createDefaultScreen(Boolean isManager){
-        // set temporary text to be displayed in the center of the screen
-        Text centerText = new Text("This is the center");
 
         // create the border pane object
         borderPane = new BorderPane();
@@ -72,7 +71,7 @@ public class Pos{
         }
         else{ // is an employee
             // style of left side is a vbox in a vbox
-            VBox wholeLeftSide = new VBox(createLeftSideOptions(), logoutButton());
+            VBox wholeLeftSide = new VBox(createLeftSideOptions(), createStockList(), logoutButton());
             borderPane.setLeft(wholeLeftSide);
         }
 
@@ -93,7 +92,7 @@ public class Pos{
         // create the tabs
         Tab till = new Tab("Till", createTillTab());
         till.setClosable(false);
-        Tab refunds = new Tab("Refunds", new Label("This is the refunds"));
+        Tab refunds = new Tab("Refunds", createRefundsTab());
         refunds.setClosable(false);
 
         // create the tabs pane
@@ -103,6 +102,119 @@ public class Pos{
         return tabs;
     }
 
+    private VBox createStockList(){
+
+        // create the vbox and add the button to it
+        VBox vBox = new VBox();
+        Button stockList = new Button("StockList");
+        stockList.getStyleClass().add("left-buttons");
+        stockList.setOnAction(e -> {
+            // update the button
+            app.stockListButtonClicked();
+        });
+        vBox.getChildren().add(stockList);
+
+        // add the styling
+        vBox.getStyleClass().addAll("leftBox");
+
+        return vBox;
+    }
+
+    /**
+     * A function that will create the refunds tab.
+     * The user will first select a receipt and then the select a checkbox to make sure that It was returned to the correct tender type
+     * 
+     * @return A BorderPane containing the refunds tab
+     */
+    private BorderPane createRefundsTab(){
+
+        // first create a border pane
+        BorderPane refunds = new BorderPane();
+
+        // VBox to hold the found refund section
+        VBox foundRefund = new VBox();
+        refunds.setCenter(foundRefund);
+
+        // create the top section
+        Text selectReceipt = new Text("Select a receipt by ID: ");
+        TextField receiptID = new TextField();
+
+        // now display that receipt
+        Button displayReceipt = new Button("Display Receipt");
+        displayReceipt.setOnAction(e -> {
+            if (foundRefund.getChildren().isEmpty() == false){
+                foundRefund.getChildren().clear();
+            }
+            // get the receipt
+            JSONObject receipt = fileManagement.getReceiptByID(Integer.parseInt(receiptID.getText()));
+
+            // add the specific receipt to the screen
+            Text saleID = new Text("Sale ID: " + receipt.getInt("ReceiptID"));
+            Text saleDate = new Text(" Date: " + receipt.getString("date"));
+            Text salePaymentMethod = new Text(" Payment Method: " + receipt.getString("paymentMethod"));
+            Text saleTotalValue = new Text(" Total Value: £" + receipt.getDouble("totalValue"));
+
+            // VBox to hold each of the products in the transaction
+            VBox allProds = new VBox();
+
+            // Now get each of the products in the sale
+            JSONObject products = receipt.getJSONObject("products");
+            for (String productKey : products.keySet()){
+
+                // the individual product
+                JSONObject product = products.getJSONObject(productKey);
+
+                // details on the given product
+                Text productName = new Text(" Product Name: " + product.getString("name"));
+                Text productQuantity = new Text(" Quantity: " + product.getInt("quantity"));
+                Text productPrice = new Text(" Price: £" + product.getDouble("price"));
+
+                // add all of the details to the HBox
+                HBox productBox = new HBox(productName, productQuantity, productPrice);
+
+                // add the product to the products VBox
+                allProds.getChildren().addAll(productBox);
+            }
+
+            // collect all details to a receipt to show
+            HBox receiptDetails = new HBox(saleID, saleDate, salePaymentMethod, saleTotalValue, allProds);
+
+            // now add to the VBox inside of the border pane
+            foundRefund.getChildren().add(receiptDetails);
+
+            // now add the refund button and CheckBox to confirm the refund
+            Button refund = new Button("Refund");
+            Label refundLabel = new Label("Confirm Refund: ");
+            CheckBox refundConfirmed = new CheckBox("Refund Confirmed");
+            refund.setOnAction(e2 -> {
+                // if checkbox selected
+                if (refundConfirmed.isSelected()){
+                    JSONObject toBeRemoved = fileManagement.getReceiptByID(Integer.parseInt(receiptID.getText()));
+                    fileManagement.addRefund(toBeRemoved);
+                    receiptDetails.getChildren().clear();
+                    foundRefund.getChildren().clear();
+                }
+                // if checkbox not selected
+                else{
+                    System.err.println("Refund not confirmed");
+                }
+            });
+
+            // add to the found refund VBox
+            foundRefund.getChildren().addAll(refund, refundLabel, refundConfirmed);
+        });
+
+        // add all of the items to a HBox and add to the top of the border pane
+        HBox selectReceiptSection = new HBox(selectReceipt, receiptID, displayReceipt);
+        refunds.setTop(selectReceiptSection);
+
+        return refunds;
+    }
+
+    /**
+     * Create the till tab
+     * @return A BorderPane containing the till
+     */
     private BorderPane createTillTab(){
 
         // create the border pane for the whole till
@@ -153,6 +265,30 @@ public class Pos{
                     itemToAdd.getChildren().add(new Text(" Quantity: " + stockQuantities.get(stockIDs.indexOf(item.getInt("id")))));
                     itemToAdd.getChildren().add(new Text(" ID: " + String.valueOf(item.getInt("id"))));
 
+                    // create a button that will remove the item from the till
+                    Button removeItem = new Button("Remove");
+                    removeItem.setOnAction(e2 -> {
+                        // remove the item from the till
+                        int index = stockIDs.indexOf(item.getInt("id"));
+                        stockIDs.remove(index);
+                        int tempQuantity = stockQuantities.get(index); // save so can use for removal
+                        stockQuantities.remove(index);
+
+                        // remove the item from the till
+                        itemsContainer.getChildren().remove(itemToAdd);
+
+                        // update the till total
+                        javafx.scene.Node totalVBox = till.getTop();
+                        tillTotal -= item.getDouble("cost") * tempQuantity;
+                        if(totalVBox instanceof VBox){ // NO IDEA WHY THIS IS NEEDED AS I KNOW A VBOX IS THE ONLY THING IN THE TOP OF THE BORDERPANE BUT YK FUN
+                            ((Text) ((VBox) totalVBox).getChildren().get(0)).setText("Total: " + String.valueOf(tillTotal));
+                        }
+                        else{
+                            System.err.println("Till total is not a VBox");
+                        }    
+                    });
+                    itemToAdd.getChildren().add(removeItem);
+
                     // add the item to the till
                     itemsContainer.getChildren().add(itemToAdd);
                 }
@@ -174,13 +310,13 @@ public class Pos{
         VBox searchForItemSection = new VBox(searchForItem, searchForItemByID, searchForItemButton);
 
         // now add the options to send the till to a receipt this will also sit on the right side of the borderPane
-        ComboBox paymentMethods = new ComboBox();
-        paymentMethods.getItems().add("Debit");
-        paymentMethods.getItems().add("Credit");
-        paymentMethods.getItems().add("Amex");
-        paymentMethods.getItems().add("Cash");
-        paymentMethods.getItems().add("Gift Card");
-        paymentMethods.getItems().add("Other");
+        ComboBox<Text> paymentMethods = new ComboBox<Text>();
+        paymentMethods.getItems().add(new Text ("Debit"));
+        paymentMethods.getItems().add(new Text ("Credit"));
+        paymentMethods.getItems().add(new Text ("Amex"));
+        paymentMethods.getItems().add(new Text ("Cash"));
+        paymentMethods.getItems().add(new Text ("Gift Card"));
+        paymentMethods.getItems().add(new Text ("Other"));
 
         Button sendToReceipt = new Button("Process Payment");
         sendToReceipt.setOnAction(e -> {
@@ -188,7 +324,7 @@ public class Pos{
             System.out.println("Payment Made");
 
             // add payment to the receipts.json file
-            Transaction transaction = new Transaction(stockIDs, stockQuantities, paymentMethods.getValue().toString());
+            Transaction transaction = new Transaction(stockIDs, stockQuantities, paymentMethods.getValue().getText());
             fileManagement.addReceipt(transaction);
 
             // update the stock count
@@ -362,22 +498,12 @@ public class Pos{
             updateGUI(homeButton);
         });
 
-        Button discountsButton = new Button("Discount");
-
-        // create an event handler for the button
-        discountsButton.setOnAction(e -> {
-            // update the button
-            updateGUI(discountsButton);
-        });
-
         // format the buttons to fill the whole VBox and get colour settings
         homeButton.setMaxWidth(Double.MAX_VALUE);
         homeButton.getStyleClass().add("left-buttons");
-        discountsButton.setMaxWidth(Double.MAX_VALUE);
-        discountsButton.getStyleClass().add("left-buttons");
 
         // use VBox to set the bottom with a button and text
-        VBox leftOptions = new VBox(homeButton, discountsButton);
+        VBox leftOptions = new VBox(homeButton);
 
         // apply styling to the box
         leftOptions.getStyleClass().addAll("leftBox");
@@ -417,16 +543,5 @@ public class Pos{
         bottomBox.getStyleClass().add("bottom-box");
 
         return bottomBox;
-    }
-
-    /**
-     * For now text will sit here
-     * @return A VBox containing the logout button
-     */
-    private VBox createRightOptions(){
-        // create the VBox and add the text
-        VBox rightBox = new VBox(new Text("Right Side Options"));
-
-        return rightBox;
     }
 }

@@ -5,7 +5,7 @@ package com.rhyswalker.ricepos;
  * Users can choose to either view, edit, add or remove stock
  * 
  * @author Rhys Walker
- * @version 0.2
+ * @version 1.0
  * @since 2023-12-24
  */
 

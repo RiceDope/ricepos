@@ -1,6 +1,6 @@
 # Welcome to RicePos
 
-*defaultManager changed to admin*
+*This is the last commit before V1.0 release*
 
 The aim of the project is to create a rough point of sale system. This is my first attempt with using OpenJfx and Maven. Any important messages will be displayed at the top of this README in *italics*.
 
@@ -94,7 +94,10 @@ This is the file that will count all of the purchases that have been made. (Rece
 This is the file that will count all of the refunds that have been processed through the till (purchases.ReceiptId, reason(Of specified list))
 
 ## Recent Updates
-- Scene now tracks size
+- Reports has an all Sales tab, total throughput and all refunds
+- Updated the CheckBox to select the correct DataType
+- Added the refunds tab
+- Added stockList when logged in as an employee
 
 ## Known issues
 - Description needs to be added to stock.json to allow differentiation between names of similar type.
@@ -104,6 +107,7 @@ This is the file that will count all of the refunds that have been processed thr
 - NoSuchAlgorithmException needs to be organised to work correctly 100%
 - General Code Cleanliness needs to be updated to be maintainable
 - No tracking of adjustments made to users accounts or stock
+- Item Specific has not been worked on
 
 ## Links
 These are links to sites that helped me while developing the project or software that you need to run the program.
