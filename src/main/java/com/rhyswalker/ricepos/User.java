@@ -5,7 +5,7 @@ package com.rhyswalker.ricepos;
  * Will have custom permision loaded from a json file at login.
  * 
  * @author Rhys Walker
- * @version 0.1
+ * @version 1.0
  * @since 2023-12-23
  */
 

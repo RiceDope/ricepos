@@ -5,8 +5,8 @@ package com.rhyswalker.ricepos;
  * This screen allows the manager to add, edit and remove users from the system.
  * 
  * @author Rhys Walker
- * @version 0.5
- * @since 2023-12-26
+ * @version 1.0
+ * @since 2023-12-29
  */
 
 import javafx.scene.layout.*;

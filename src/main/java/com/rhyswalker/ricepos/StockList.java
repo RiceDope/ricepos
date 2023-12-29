@@ -12,12 +12,7 @@ package com.rhyswalker.ricepos;
 import javafx.scene.layout.*;
 import javafx.scene.control.Button;
 import javafx.scene.text.Text;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
-import javafx.scene.control.TextField;
-import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.text.TextFlow;
 import org.json.JSONObject;
 
 public class StockList {

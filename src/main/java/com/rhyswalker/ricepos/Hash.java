@@ -5,6 +5,8 @@ package com.rhyswalker.ricepos;
  * All credit to them for the code
  * 
  * @author https://www.geeksforgeeks.org/sha-256-hash-in-java/
+ * @version 1.0
+ * @since 2023-12-23
  */
 
 import java.math.BigInteger;

@@ -5,8 +5,8 @@ package com.rhyswalker.ricepos;
  * By default the application will create a directory in the users home directory.
  * 
  * @author Rhys Walker
- * @version 0.8
- * @since 2023-12-26
+ * @version 1.0
+ * @since 2023-12-29
  */
 
 import java.nio.file.*;
@@ -24,7 +24,7 @@ public class FileManagement {
     // paths to files or directories in the home directory
     private Path directoryPath;
     private Path usersFilePath;
-    private static Path customisationsFilePath;
+    private static Path customisationsFilePath; // allows for static access to these functions
     private Path sysfilesFilePath;
     private Path stockFilePath;
     private Path removedFilePath;

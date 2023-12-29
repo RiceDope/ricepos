@@ -4,8 +4,8 @@ package com.rhyswalker.ricepos;
  * Pos.java is the class responsible for the actuall till screen of the application.
  * 
  * @author Rhys Walker
- * @version 0.3
- * @since 2023-12-23
+ * @version 1.0
+ * @since 2023-12-29
  */
 
 import javafx.scene.control.Button;

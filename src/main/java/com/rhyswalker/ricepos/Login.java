@@ -5,7 +5,7 @@ package com.rhyswalker.ricepos;
  * This is in a very much testing state at the moment. Will be updated as the project progresses.
  * 
  * @author Rhys Walker
- * @version 0.9
+ * @version 1.0
  * @since 2023-12-23
  */
 

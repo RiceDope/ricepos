@@ -5,8 +5,8 @@ package com.rhyswalker.ricepos;
  * Will allow managers to veiw reports based on sales refinds and profit made.
  * 
  * @author Rhys Walker
- * @version 0.1
- * @since 2023-12-24
+ * @version 1.0
+ * @since 2023-12-29
  */
 
 import javafx.scene.layout.*;
